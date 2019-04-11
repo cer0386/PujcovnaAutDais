@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EB545A4A-F946-4D25-9878-4BC053465A4E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PujcovnaAutORM</RootNamespace>
+    <AssemblyName>PujcovnaAutORM</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Database\Auto.cs" />
+    <Compile Include="Database\Faktura.cs" />
+    <Compile Include="Database\mssql\AutoTable.cs" />
+    <Compile Include="Database\mssql\Database.cs" />
+    <Compile Include="Database\mssql\PlatbaTable.cs" />
+    <Compile Include="Database\mssql\FakturaTable.cs" />
+    <Compile Include="Database\mssql\PoziceTable.cs" />
+    <Compile Include="Database\mssql\RezervaceTable.cs" />
+    <Compile Include="Database\mssql\RezervovanoTable.cs" />
+    <Compile Include="Database\mssql\ServisTable.cs" />
+    <Compile Include="Database\mssql\Typ_platbyTable.cs" />
+    <Compile Include="Database\mssql\ZakaznikTable.cs" />
+    <Compile Include="Database\mssql\ZamestnanecTable.cs" />
+    <Compile Include="Database\Platba.cs" />
+    <Compile Include="Database\Pozice.cs" />
+    <Compile Include="Database\Rezervace.cs" />
+    <Compile Include="Database\Rezervovano.cs" />
+    <Compile Include="Database\Servis.cs" />
+    <Compile Include="Database\Typ_platby.cs" />
+    <Compile Include="Database\Zakaznik.cs" />
+    <Compile Include="Database\Zamestnanec.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
