@@ -110,7 +110,7 @@ namespace PujcovnaAutORM.Database.mssql
         /// Select the record.
         /// </summary>
         /// <param name="id">zamestnanec id</param>
-        protected Zamestnanec select(string id_zamestnance, Database pDb = null)
+        public Zamestnanec select(string id_zamestnance, Database pDb = null)
         {
             Database db;
             if (pDb == null)

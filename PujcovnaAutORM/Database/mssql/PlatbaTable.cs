@@ -128,7 +128,7 @@ namespace PujcovnaAutORM.Database.mssql
                 int i = -1;
                 platba.id_platba = reader.GetInt32(++i);
                 int cislo_fak = reader.GetInt32(++i);
-                platba.faktura = new FakturaTable(); // todo
+                platba.faktura = new FakturaTable().select(cislo_fak);
                 int id_p = reader.GetInt32(++i);
                 platba.typ_platby = new Typ_platbyTable().select(id_p);
                 platba.castka = reader.GetInt32(++i);

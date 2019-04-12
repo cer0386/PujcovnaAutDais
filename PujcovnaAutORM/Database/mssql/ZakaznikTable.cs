@@ -110,7 +110,7 @@ namespace PujcovnaAutORM.Database.mssql
         /// Select the record.
         /// </summary>
         /// <param name="id">zakaznik id</param>
-        protected Zakaznik select(string cislo_RP, Database pDb = null)
+        public Zakaznik select(string cislo_RP, Database pDb = null)
         {
             Database db;
             if (pDb == null)

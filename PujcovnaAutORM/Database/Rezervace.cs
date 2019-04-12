@@ -10,7 +10,7 @@ namespace PujcovnaAutORM.Database
     {
         public int cislo_rezervace { get; set; }
         public Zakaznik zakaznik { get; set; }
-        public Zakaznik zamestnanec { get; set; }
+        public Zamestnanec zamestnanec { get; set; }
         public DateTime vyzvednuti { get; set; }
         public DateTime vraceni { get; set; }
         
