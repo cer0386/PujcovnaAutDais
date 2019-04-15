@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PujcovnaAutORM.Database.mssql
+namespace PujcovnaAutORM.ORM.mssql
 {
     public class RezervaceTable
     {

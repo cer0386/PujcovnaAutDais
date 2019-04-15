@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PujcovnaAutORM.Database
+namespace PujcovnaAutORM.ORM
 {
     public class Platba
     {

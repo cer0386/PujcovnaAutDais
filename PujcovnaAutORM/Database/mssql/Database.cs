@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 
-namespace PujcovnaAutORM.Database.mssql
+namespace PujcovnaAutORM.ORM.mssql
 {
     public class Database
     {
