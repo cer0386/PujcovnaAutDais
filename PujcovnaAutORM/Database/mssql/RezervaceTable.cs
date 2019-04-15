@@ -12,6 +12,12 @@ namespace PujcovnaAutORM.ORM.mssql
     {
         public static String SQL_SELECT = "SELECT * FROM \"Rezervace\"";
         public static String SQL_SELECT_ID = "SELECT * FROM \"Rezervace\" WHERE Cislo_rezervace = @cislo_rezervace";
+        public static String SQL_SELECT_NEXTWEEK = "SELECT * FROM \"Rezervace\" WHERE Vraceni>CAST(GETDATE() AS DATE) " +
+            "AND Vraceni<DATEADD(week,2,CAST(GETDATE() AS DATE))";
+        public static String SQL_SELECT_ZAK = "SELECT r.* FROM \"Rezervace\" WHERE Cislo_ridicskeho_prukazu=@cislo_RP ORDER BY Vyzvednuti";
+        public static String SQL_SELECT_ZAM = "SELECT * FROM \"Rezervace\" where ID_zamestnance=@idZamestnance";
+        public static String SQL_SELECT_AUTO = "SELECT * FROM \"Rezervace\" r JOIN \"Rezervovano\" re on r.Cislo_Rezervace=re.Cislo_Rezervace"+
+            " where re.SPZ=@spz";
         public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES (@cislo_rezervace, @zakaznik, @zamestnanec," +
             "@vyzvednuti, @vraceni";
         public static String SQL_DELETE_ID = "DELETE FROM \"Rezervace\" WHERE Cislo_rezezervace = @cislo_rezervace";
@@ -22,7 +28,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Rezervace rezervace, Database pDb = null)
+        public static int insert(Rezervace rezervace, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -50,7 +56,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Rezervace rezervace, Database pDb = null)
+        public static int update(Rezervace rezervace, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -79,7 +85,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Rezervace> select(Database pDb = null)
+        public Collection<Rezervace> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -93,6 +99,129 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             SqlCommand command = db.CreateCommand(SQL_SELECT);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervaces;
+        }
+
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Rezervace> selectNextWeek(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_NEXTWEEK);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervaces;
+        }
+
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Rezervace> selectZak(string cislo_RP,Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_ZAK);
+            command.Parameters.AddWithValue("@cislo_RP", cislo_RP);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervaces;
+        }
+
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Rezervace> selectZam(string zam_ID, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_ZAM);
+            command.Parameters.AddWithValue("@idZamestnance", zam_ID);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervaces;
+        }
+
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Rezervace> selectAuto(string spz, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_AUTO);
+            command.Parameters.AddWithValue("@spz", spz);
             SqlDataReader reader = db.Select(command);
 
             Collection<Rezervace> rezervaces = Read(reader);
@@ -149,7 +278,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">rezervace id</param>
         /// <returns></returns>
-        protected int delete(int cislo_rezervace, Database pDb = null)
+        public static int delete(int cislo_rezervace, Database pDb = null)
         {
             Database db;
             if (pDb == null)

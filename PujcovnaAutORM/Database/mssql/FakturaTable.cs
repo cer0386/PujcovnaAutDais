@@ -22,7 +22,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Faktura faktura, Database pDb = null)
+        public static int insert(Faktura faktura, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -50,7 +50,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Faktura faktura, Database pDb = null)
+        public static int update(Faktura faktura, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -79,7 +79,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Faktura> select(Database pDb = null)
+        public Collection<Faktura> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -149,7 +149,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">faktura id</param>
         /// <returns></returns>
-        protected int delete(int cislo_faktury, Database pDb = null)
+        public static int delete(int cislo_faktury, Database pDb = null)
         {
             Database db;
             if (pDb == null)

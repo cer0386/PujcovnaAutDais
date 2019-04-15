@@ -22,7 +22,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Servis servis, Database pDb = null)
+        public static int insert(Servis servis, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -50,7 +50,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Servis servis, Database pDb = null)
+        public static int update(Servis servis, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -79,7 +79,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Servis> select(Database pDb = null)
+        public Collection<Servis> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -149,7 +149,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">servis id</param>
         /// <returns></returns>
-        protected int delete(int poradi_s, Database pDb = null)
+        public static int delete(int poradi_s, Database pDb = null)
         {
             Database db;
             if (pDb == null)

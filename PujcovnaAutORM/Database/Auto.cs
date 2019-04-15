@@ -15,7 +15,7 @@ namespace PujcovnaAutORM.ORM
         public DateTime stk { get; set; }
         public int pocet_nehod { get; set; }
         public bool servis { get; set; }
-        public double najeto { get; set; }
+        public decimal najeto { get; set; }
         public int cena_za_den { get; set; }
         
 

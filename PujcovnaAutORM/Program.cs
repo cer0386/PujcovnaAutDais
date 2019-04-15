@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PujcovnaAutORM.ORM.mssql;
 using PujcovnaAutORM.ORM;
 
+
 namespace PujcovnaAutORM
 {
     class Program
@@ -17,15 +18,21 @@ namespace PujcovnaAutORM
 
             DateTime dnes = new DateTime(2019, 4, 14);
 
+            
+
             Auto a = new Auto();
             a.spz = "A123456";
             a.model = "Kombi";
             a.znacka = "Škoda";
             a.zakoupeno = new DateTime(2014, 6, 22);
             a.stk = new DateTime(2019, 12, 22);
-            a.najeto = 22000.2;
+            a.najeto = 22000.2m;
             a.servis = false;
             a.cena_za_den = 1200;
+
+            AutoTable.insert(a, db);
+            Console.WriteLine(new AutoTable().select(a.spz, db).toString());
+            AutoTable.delete(a.spz, db);
 
             Auto a2 = new Auto();
             a2.spz = "B123456";
@@ -33,7 +40,7 @@ namespace PujcovnaAutORM
             a2.znacka = "BWM";
             a2.zakoupeno = new DateTime(2010, 6, 22);
             a2.stk = new DateTime(2019, 4, 1);
-            a2.najeto = 12000.2;
+            a2.najeto = 12000.2m;
             a.servis = true;
             a2.cena_za_den = 1600;
 
@@ -43,7 +50,7 @@ namespace PujcovnaAutORM
             a3.znacka = "Ford";
             a3.zakoupeno = new DateTime(2018, 6, 22);
             a3.stk = new DateTime(2022, 12, 22);
-            a3.najeto = 2000.4;
+            a3.najeto = 2000.4m;
             a.servis = false;
             a3.cena_za_den = 2000;
 
@@ -63,7 +70,7 @@ namespace PujcovnaAutORM
             a5.znacka = "BMW";
             a5.zakoupeno = new DateTime(2016, 6, 22);
             a5.stk = new DateTime(2020, 1, 22);
-            a5.najeto = 20000.2;
+            a5.najeto = 20000.2m;
             a.servis = false;
             a5.cena_za_den = 3200;
 
@@ -145,6 +152,9 @@ namespace PujcovnaAutORM
             Faktura f1 = new Faktura();
 
             Platba pl1 = new Platba();
+
+
+            Console.ReadLine();
         }
     }
 }

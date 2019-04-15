@@ -22,7 +22,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Zamestnanec zamestnanec, Database pDb = null)
+        public static int insert(Zamestnanec zamestnanec, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -50,7 +50,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Zamestnanec zamestnanec, Database pDb = null)
+        public static int update(Zamestnanec zamestnanec, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -79,7 +79,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Zamestnanec> select(Database pDb = null)
+        public Collection<Zamestnanec> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -149,7 +149,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">zamestnanec id</param>
         /// <returns></returns>
-        protected int delete(string id_zamestnance, Database pDb = null)
+        public static int delete(string id_zamestnance, Database pDb = null)
         {
             Database db;
             if (pDb == null)

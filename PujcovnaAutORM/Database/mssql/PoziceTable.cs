@@ -22,7 +22,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Pozice pozice)
+        public static int insert(Pozice pozice)
         {
             Database db = new Database();
             db.Connect();
@@ -38,7 +38,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param nazev="pozice"></param>
         /// <returns></returns>
-        protected  int update(Pozice pozice)
+        public static int update(Pozice pozice)
         {
             Database db = new Database();
             db.Connect();
@@ -53,7 +53,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select records.
         /// </summary>
-        protected  Collection<Pozice> select()
+        public Collection<Pozice> select()
         {
             Database db = new Database();
             db.Connect();
@@ -92,7 +92,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Delete the record.
         /// </summary>
-        protected  int delete(int id)
+        public static int delete(int id)
         {
             Database db = new Database();
             db.Connect();

@@ -24,7 +24,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Rezervovano rezervovano, Database pDb = null)
+        public static int insert(Rezervovano rezervovano, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -52,7 +52,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Rezervovano rezervovano, Database pDb = null)
+        public static int update(Rezervovano rezervovano, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -81,7 +81,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Rezervovano> select(Database pDb = null)
+        public Collection<Rezervovano> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -175,7 +175,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">rezervovano id</param>
         /// <returns></returns>
-        protected int delete(int cislo_rezervace, Database pDb = null)
+        public static int delete(int cislo_rezervace, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -199,7 +199,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return ret;
         }
-        protected int delete(int cislo_rezervace, string spz, Database pDb = null)
+        public static int delete(int cislo_rezervace, string spz, Database pDb = null)
         {
             Database db;
             if (pDb == null)

@@ -13,7 +13,7 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT = "SELECT * FROM \"Auto\"";
         public static String SQL_SELECT_SPZ = "SELECT * FROM \"Auto\" WHERE SPZ = @spz";
         public static String SQL_INSERT = "INSERT INTO \"Auto \" VALUES (@spz, @model, @znacka, @zakoupeno, " +
-            "@stk, @pocet_nehod, @sevis, @najeto, @cena_za_den";
+            "@stk, @pocet_nehod, @servis, @najeto, @cena_za_den)";
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Auto\" WHERE SPZ = @spz";
         public static String SQL_UPDATE = "UPDATE \"Auto\" SET SPZ=@spz, Model=@model, " +
             "Znacka=@znacka, Zakoupeno=@zakoupeno, STK=@stk, Pocet_nehod=@pocet_nehod, Servis=@servis,najeto=@najeto" +
@@ -23,7 +23,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Auto auto, Database pDb = null)
+        public static int insert(Auto auto, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -51,7 +51,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Auto auto, Database pDb = null)
+        public static int update(Auto auto, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -80,7 +80,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Auto> select(Database pDb = null)
+        public Collection<Auto> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -150,7 +150,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">auto id</param>
         /// <returns></returns>
-        protected int delete(string spz, Database pDb = null)
+        public static int delete(string spz, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -204,7 +204,7 @@ namespace PujcovnaAutORM.ORM.mssql
                 auto.stk = reader.GetDateTime(++i);
                 auto.pocet_nehod = reader.GetInt32(++i);
                 auto.servis = reader.GetBoolean(++i);
-                auto.najeto = reader.GetDouble(++i);
+                auto.najeto = reader.GetDecimal(++i);
                 auto.cena_za_den = reader.GetInt32(++i);
 
                 autos.Add(auto);

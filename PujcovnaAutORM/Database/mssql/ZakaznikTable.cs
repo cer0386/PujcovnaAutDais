@@ -12,6 +12,7 @@ namespace PujcovnaAutORM.ORM.mssql
     {
         public static String SQL_SELECT = "SELECT * FROM \"Zakaznik\"";
         public static String SQL_SELECT_ID = "SELECT * FROM \"Zakaznik\" WHERE Cislo_ridicskeho_prukazu = @cislo_RP";
+        public static String SQL_SELECT_BYNAME = "SELECT * FROM \"Zakaznik\" WHERE jmeno=@jmeno AND prijmeni=@prijmeni";
         public static String SQL_INSERT = "INSERT INTO \"Zakaznik \" VALUES (@cislo_RP, @jmeno, @prijmeni, @mesto, " +
             "@ulice, @cislo_popisne, @psc, @email";
         public static String SQL_DELETE_ID = "DELETE FROM \"Zakaznik\" WHERE Cislo_ridicskeho_prukazu = @cislo_RP";
@@ -22,7 +23,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Zakaznik zakaznik, Database pDb = null)
+        public static int insert(Zakaznik zakaznik, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -50,7 +51,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Update the record.
         /// </summary>
-        protected int update(Zakaznik zakaznik, Database pDb = null)
+        public static int update(Zakaznik zakaznik, Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -79,7 +80,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select the records.
         /// </summary>
-        protected Collection<Zakaznik> select(Database pDb = null)
+        public Collection<Zakaznik> select(Database pDb = null)
         {
             Database db;
             if (pDb == null)
@@ -93,6 +94,38 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             SqlCommand command = db.CreateCommand(SQL_SELECT);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Zakaznik> zakazniks = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return zakazniks;
+        }
+
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Zakaznik> select(string jmeno, string prijmeni,Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_BYNAME);
+            command.Parameters.AddWithValue("@jmeno", jmeno);
+            command.Parameters.AddWithValue("@prijmeni", prijmeni);
             SqlDataReader reader = db.Select(command);
 
             Collection<Zakaznik> zakazniks = Read(reader);
@@ -149,7 +182,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param name="idUser">zakaznik id</param>
         /// <returns></returns>
-        protected int delete(string cislo_RP, Database pDb = null)
+        public static int delete(string cislo_RP, Database pDb = null)
         {
             Database db;
             if (pDb == null)

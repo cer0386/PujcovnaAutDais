@@ -22,7 +22,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        protected int insert(Platba platba)
+        public static int insert(Platba platba)
         {
             Database db = new Database();
             db.Connect();
@@ -38,7 +38,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param nazev="platba"></param>
         /// <returns></returns>
-        protected int update(Platba platba)
+        public static int update(Platba platba)
         {
             Database db = new Database();
             db.Connect();
@@ -53,7 +53,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Select records.
         /// </summary>
-        protected Collection<Platba> select()
+        public Collection<Platba> select()
         {
             Database db = new Database();
             db.Connect();
@@ -92,7 +92,7 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Delete the record.
         /// </summary>
-        protected int delete(int id)
+        public static int delete(int id)
         {
             Database db = new Database();
             db.Connect();
