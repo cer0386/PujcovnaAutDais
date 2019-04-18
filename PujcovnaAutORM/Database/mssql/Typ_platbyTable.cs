@@ -10,26 +10,36 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class Typ_platbyTable
     {
-        public static String TABLE_NAME = "Typ_platby";
-
-        public static String SQL_SELECT_ID = "SELECT * FROM Typ_platby WHERE ID_typ_platby=@id_typ_platby";
-        public static String SQL_SELECT = "SELECT * FROM Typ_platby";
-        public static String SQL_INSERT = "INSERT INTO Typ_platby VALUES (@id_typ_platby, @nazev)";
-        public static String SQL_DELETE_ID = "DELETE FROM Typ_platby WHERE ID_typ_platby=@id_typ_platby";
-        public static String SQL_UPDATE = "UPDATE Typ_platby SET Zpusob_platby=@zpusob_platby WHERE ID_typ_platby=@id_typ_platby";
+        //public static String SQL_SELECT = "SELECT * FROM Typ_platby";
+        public static String SQL_SELECT_ID = "SELECT \"ID_typ_platby\", \"Zbusob_platby\" FROM \"Typ_platby\" "+
+            "WHERE ID_typ_platby=@id_typ_platby";
+        public static String SQL_INSERT = "INSERT INTO \"Typ_platby\" VALUES (@id_typ_platby, @nazev)";
+        public static String SQL_DELETE_ID = "DELETE FROM \"Typ_platby\" WHERE ID_typ_platby=@id_typ_platby";
+        public static String SQL_UPDATE = "UPDATE \"Typ_platby\" SET Zbusob_platby=@zpusob_platby WHERE ID_typ_platby=@id_typ_platby";
 
         #region Abstraktní metody
         /// <summary>
         /// Insert the record.
         /// </summary>
-        public static int insert(Typ_platby typ_platby)
+        public static int insert(Typ_platby typ_platby, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_INSERT);
             PrepareCommand(command, typ_platby);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
@@ -38,26 +48,44 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param nazev="typ_platby"></param>
         /// <returns></returns>
-        public static int update(Typ_platby typ_platby)
+        public static int update(Typ_platby typ_platby, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_UPDATE);
             PrepareCommand(command, typ_platby);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select records.
         /// </summary>
         public Collection<Typ_platby> select()
         {
-            Database db = new Database();
-            db.Connect();
-
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_SELECT);
             SqlDataReader reader = db.Select(command);
 
@@ -66,14 +94,22 @@ namespace PujcovnaAutORM.ORM.mssql
             db.Close();
             return Typ_platbys;
         }
-
+        */
         /// <summary>
         /// Select records for typ_platby.
         /// </summary>
-        public Typ_platby select(int id_typ_platby)
+        public Typ_platby select(int id_typ_platby, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_SELECT_ID);
 
             command.Parameters.AddWithValue("@id_typ_platby", id_typ_platby);
@@ -86,22 +122,36 @@ namespace PujcovnaAutORM.ORM.mssql
                 typ_platby = typ_platbys[0];
             }
             reader.Close();
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return typ_platby;
         }
         /// <summary>
         /// Delete the record.
         /// </summary>
-        public static int delete(int id)
+        public static int delete(int id, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_DELETE_ID);
 
             command.Parameters.AddWithValue("@id_typ_platby", id);
             int ret = db.ExecuteNonQuery(command);
 
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
         #endregion

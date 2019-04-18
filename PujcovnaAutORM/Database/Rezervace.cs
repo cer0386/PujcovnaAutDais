@@ -14,6 +14,9 @@ namespace PujcovnaAutORM.ORM
         public DateTime vyzvednuti { get; set; }
         public DateTime vraceni { get; set; }
         
+        public string cislo_rp { get; set; }
+        public string id_zam { get; set; }
+
         public string toString()
         {
             return this.cislo_rezervace.ToString() + " " + this.zakaznik.cislo_RP + " " +

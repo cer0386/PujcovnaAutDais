@@ -10,10 +10,8 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class PoziceTable
     {
-        public static String TABLE_NAME = "Pozice";
-
-        public static String SQL_SELECT_ID = "SELECT * FROM Pozice WHERE ID_pozice=@id_pozice";
-        public static String SQL_SELECT= "SELECT * FROM Pozice";
+        //public static String SQL_SELECT = "SELECT * FROM Pozice";
+        public static String SQL_SELECT_ID = "SELECT \"ID_pozice\", \"Nazev\" FROM Pozice WHERE ID_pozice=@id_pozice";
         public static String SQL_INSERT = "INSERT INTO Pozice VALUES (@id_pozice, @nazev)";
         public static String SQL_DELETE_ID = "DELETE FROM Pozice WHERE ID_pozice=@id_pozice";
         public static String SQL_UPDATE = "UPDATE Pozice SET Nazev=@nazev WHERE id_pozice=@id_pozice";
@@ -22,14 +20,25 @@ namespace PujcovnaAutORM.ORM.mssql
         /// <summary>
         /// Insert the record.
         /// </summary>
-        public static int insert(Pozice pozice)
+        public static int insert(Pozice pozice, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_INSERT);
             PrepareCommand(command, pozice);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
@@ -38,18 +47,29 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param nazev="pozice"></param>
         /// <returns></returns>
-        public static int update(Pozice pozice)
+        public static int update(Pozice pozice, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_UPDATE);
             PrepareCommand(command, pozice);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select records.
         /// </summary>
@@ -63,17 +83,25 @@ namespace PujcovnaAutORM.ORM.mssql
 
             Collection<Pozice> Pozices = Read(reader, true);
             reader.Close();
-            db.Close();
+            if (pDb == null)
             return Pozices;
         }
-
+        */
         /// <summary>
         /// Select records for pozice.
         /// </summary>
-        public Pozice select(int id_pozice)
+        public Pozice select(int id_pozice, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_SELECT_ID);
 
             command.Parameters.AddWithValue("@id_pozice", id_pozice);
@@ -86,22 +114,36 @@ namespace PujcovnaAutORM.ORM.mssql
                 pozice = pozices[0];
             }
             reader.Close();
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return pozice;
         }
         /// <summary>
         /// Delete the record.
         /// </summary>
-        public static int delete(int id)
+        public static int delete(int id, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_DELETE_ID);
 
             command.Parameters.AddWithValue("@id_pozice", id);
             int ret = db.ExecuteNonQuery(command);
 
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
         #endregion

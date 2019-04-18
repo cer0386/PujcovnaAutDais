@@ -5,12 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using PujcovnaAutORM.ORM.mssql;
 using PujcovnaAutORM.ORM;
-
+using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace PujcovnaAutORM
 {
+
     class Program
     {
+        
+
         static void Main(string[] args)
         {
             Database db = new Database();
@@ -19,7 +23,7 @@ namespace PujcovnaAutORM
             DateTime dnes = new DateTime(2019, 4, 14);
 
             
-
+            
             Auto a = new Auto();
             a.spz = "A123456";
             a.model = "Kombi";
@@ -30,10 +34,10 @@ namespace PujcovnaAutORM
             a.servis = false;
             a.cena_za_den = 1200;
 
+            Console.WriteLine("Test výpisu vložených aut");
             AutoTable.insert(a, db);
             Console.WriteLine(new AutoTable().select(a.spz, db).toString());
-            AutoTable.delete(a.spz, db);
-
+            
             Auto a2 = new Auto();
             a2.spz = "B123456";
             a2.model = "Kombi";
@@ -43,6 +47,9 @@ namespace PujcovnaAutORM
             a2.najeto = 12000.2m;
             a.servis = true;
             a2.cena_za_den = 1600;
+
+            AutoTable.insert(a2, db);
+            Console.WriteLine(new AutoTable().select(a2.spz, db).toString());
 
             Auto a3 = new Auto();
             a3.spz = "C123456";
@@ -54,6 +61,9 @@ namespace PujcovnaAutORM
             a.servis = false;
             a3.cena_za_den = 2000;
 
+            AutoTable.insert(a3, db);
+            Console.WriteLine(new AutoTable().select(a3.spz, db).toString());
+
             Auto a4 = new Auto();
             a4.spz = "D123456";
             a4.model = "Sedan";
@@ -63,6 +73,9 @@ namespace PujcovnaAutORM
             a4.najeto = 40000;
             a.servis = false;
             a4.cena_za_den = 2200;
+
+            AutoTable.insert(a4, db);
+            Console.WriteLine(new AutoTable().select(a4.spz, db).toString());
 
             Auto a5 = new Auto();
             a5.spz = "E123456";
@@ -74,6 +87,12 @@ namespace PujcovnaAutORM
             a.servis = false;
             a5.cena_za_den = 3200;
 
+            AutoTable.insert(a5, db);
+            Console.WriteLine(new AutoTable().select(a5.spz, db).toString());
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Pozice-------------------------------------------------------------------------------------------
             Pozice p1 = new Pozice();
             p1.id_pozice = 1;
             p1.nazev = "Zaměstnanec";
@@ -82,17 +101,36 @@ namespace PujcovnaAutORM
             p2.id_pozice = 2;
             p2.nazev = "Manažer";
 
+            Console.WriteLine("Test výpisu vložených pozic");
+            PoziceTable.insert(p1, db);
+            Console.WriteLine(new PoziceTable().select(p1.id_pozice, db).toString());
+            PoziceTable.insert(p2, db);
+            Console.WriteLine(new PoziceTable().select(p2.id_pozice, db).toString());
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Zaměstnanci
             Zamestnanec z = new Zamestnanec();
             z.jmeno = "Tonda";
             z.prijmeni = "Jonda";
             z.pozice = p1;
+            z.id_Pozice = p1.id_pozice;
+
+            Console.WriteLine("Test výpisu vložených zaměstnanců");
+            ZamestnanecTable.insert(z);
+            Console.WriteLine(new ZamestnanecTable().select("jon000", db).toString());
 
             Zamestnanec z2 = new Zamestnanec();
             z2.jmeno = "Juk";
             z2.prijmeni = "Bruk";
             z2.pozice = p2;
+            z2.id_Pozice = p2.id_pozice;
 
+            ZamestnanecTable.insert(z2);
+            Console.WriteLine(new ZamestnanecTable().select("bru000", db).toString());
 
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Zákazníci
             Zakaznik zak = new Zakaznik();
             zak.cislo_RP = "123BD456";
             zak.jmeno = "Jarek";
@@ -102,6 +140,10 @@ namespace PujcovnaAutORM
             zak.cislo_popisne = 44;
             zak.psc = 70020;
             zak.email = "joroZoro@gmail.com";
+
+            Console.WriteLine("Test výpisu vložených zákazníků");
+            ZakaznikTable.insert(zak);
+            Console.WriteLine(new ZakaznikTable().select(zak.cislo_RP, db).toString());
 
             Zakaznik zak2 = new Zakaznik();
             zak2.cislo_RP = "223BD456";
@@ -113,46 +155,223 @@ namespace PujcovnaAutORM
             zak2.psc = 70020;
             zak2.email = "konvaP@gmail.com";
 
-            Zakaznik zak3 = new Zakaznik();
-            zak3.cislo_RP = "323BD456";
-            zak3.jmeno = "Karel";
-            zak3.prijmeni = "Kvadlibuk";
-            zak3.mesto = "Třinec";
-            zak3.ulice = "Alešova";
-            zak3.cislo_popisne = 100;
-            zak3.psc = 70020;
-            zak3.email = "kajmanKKK@gmail.com";
+            ZakaznikTable.insert(zak2);
+            Console.WriteLine(new ZakaznikTable().select(zak2.cislo_RP, db).toString());
 
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Typy platby
             Typ_platby tp = new Typ_platby();
             tp.id_typ_platby = 1;
             tp.zpusob_platby = "Karta";
+
+            Console.WriteLine("Test výpisu vložených typů platby");
+            Typ_platbyTable.insert(tp);
+            Console.WriteLine(new Typ_platbyTable().select(tp.id_typ_platby, db).toString());
 
             Typ_platby tp2 = new Typ_platby();
             tp2.id_typ_platby = 2;
             tp2.zpusob_platby = "Hotovost";
 
+            Typ_platbyTable.insert(tp2);
+            Console.WriteLine(new Typ_platbyTable().select(tp2.id_typ_platby, db).toString());
+
             Typ_platby tp3 = new Typ_platby();
             tp3.id_typ_platby = 3;
             tp3.zpusob_platby = "Převod";
 
+            Typ_platbyTable.insert(tp3);
+            Console.WriteLine(new Typ_platbyTable().select(tp3.id_typ_platby, db).toString());
 
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Servis
             Servis s = new Servis();
             s.poradi_s = 1;
+            s.auto_spz = a.spz;
+            s.auto = a;
             s.od = new DateTime(2019, 4, 15);
             s.do_ = new DateTime(2019, 4, 18);
 
-            Rezervace r1 = new Rezervace();
-            r1.cislo_rezervace = 1; //select na pocet rez v db
-            
+            Console.WriteLine("Test výpisu vložených servisů");
+            ServisTable.insert(s);
+            Console.WriteLine(new ServisTable().select(s.poradi_s, db).toString());
 
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Rezervace
+            Rezervace r1 = new Rezervace();
+            r1.cislo_rp = zak.cislo_RP;
+            r1.id_zam = "jon000";
+            r1.vyzvednuti = new DateTime(2019, 03, 1);
+            r1.vraceni = new DateTime(2019, 03, 20);
+
+            Console.WriteLine("Test výpisu vložených rezervací");
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Auta na rezervaci
             Rezervovano re11 = new Rezervovano();
 
             Rezervovano re12 = new Rezervovano();
 
+            Console.WriteLine("Test výpisu vložených aut na rezervaci");
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Faktura
             Faktura f1 = new Faktura();
 
+
+            Console.WriteLine("Test výpisu vložených faktur");
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //Platba
             Platba pl1 = new Platba();
 
+            Console.WriteLine("Test výpisu vložených plateb");
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            //seznamy
+            Console.WriteLine("Seznam všech zákazníků, seřazených dle jména");
+            Collection<Zakaznik> zakazniks = new ZakaznikTable().select(db);
+            foreach (Zakaznik item in zakazniks)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam rezervací končící následující týden");
+            Collection<Rezervace> rezervaces = new RezervaceTable().selectNextWeek(db);
+            foreach (Rezervace item in rezervaces)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam zákazníkových rezervací podle data sestupně");
+            rezervaces.Clear();
+            rezervaces = new RezervaceTable().selectZak(zak.cislo_RP, db);
+            foreach (Rezervace item in rezervaces)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam rezervací sjednané zaměstnancem");
+            rezervaces.Clear();
+            rezervaces = new RezervaceTable().selectZam("jon000", db);
+            foreach (Rezervace item in rezervaces)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam rezervací auta");
+            rezervaces.Clear();
+            rezervaces = new RezervaceTable().selectAuto(a.spz, db);
+            foreach (Rezervace item in rezervaces)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam zaměstnanců s jejich počtem sjednaných rezervací");
+            Collection<Zamestnanec> zamestnanecs = new ZamestnanecTable().select(db);
+            foreach (Zamestnanec item in zamestnanecs)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam dostupných aut podle intervalu");
+            Collection<Auto> autos = new AutoTable().select(new DateTime(2019, 5, 1), new DateTime(2019, 5, 20), db);
+            foreach (Auto item in autos)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam faktur zákazníka");
+            Collection<Faktura> fakturas = new FakturaTable().selectZakaznikovy(zak.cislo_RP, db);
+            foreach (Faktura item in fakturas)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam nezaplacených faktur");
+            fakturas.Clear();
+            fakturas = new FakturaTable().selectNezaplace(db);
+            foreach (Faktura item in fakturas)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam plateb podle typu platby za poslední měsíc");
+            /*Console.WriteLine(new PlatbaTable().select(pl1.id_platba));
+            Collection<Zakaznik> zakazniks = new ZakaznikTable().select(db);
+            foreach (Zakaznik item in zakazniks)
+            {
+                Console.WriteLine(item.toString());
+            }*/
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam servisů pro určité auto");
+            Collection<Servis> servis = new ServisTable().select(a.spz, db);
+            foreach (Servis item in servis)
+            {
+                Console.WriteLine(item.toString());
+            }
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Seznam aut na rezervaci");
+            /*Console.WriteLine(new RezervovanoTable().select(r1.cislo_rezervace, db));
+            Collection<Zakaznik> zakazniks = new ZakaznikTable().select(db);
+            foreach (Zakaznik item in zakazniks)
+            {
+                Console.WriteLine(item.toString());
+            }*/
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+
+
+            //Procedury a funkce
+            Console.WriteLine("Nová rezervace");
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("Vyřazení auta");
+
+            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+
+            Console.WriteLine("Nový servis");
+
+            
+            //Delete testovacích záznamů vytvořených zde
+            ServisTable.delete(s.poradi_s, db);
+            //platby
+            Typ_platbyTable.delete(tp.id_typ_platby, db);
+            Typ_platbyTable.delete(tp2.id_typ_platby, db);
+            Typ_platbyTable.delete(tp3.id_typ_platby, db);
+            //faktury
+            //rezervovano
+            //rezervace
+            AutoTable.delete(a.spz, db);
+            AutoTable.delete(a2.spz, db);
+            AutoTable.delete(a3.spz, db);
+            AutoTable.delete(a4.spz, db);
+            AutoTable.delete(a5.spz, db);
+
+            ZamestnanecTable.delete("jon000", db);
+            ZamestnanecTable.delete("bru000", db);
+            PoziceTable.delete(p1.id_pozice, db);
+            PoziceTable.delete(p2.id_pozice, db);
+
+            ZakaznikTable.delete(zak.cislo_RP, db);
+            ZakaznikTable.delete(zak2.cislo_RP, db);
+           
+
+            
 
             Console.ReadLine();
         }

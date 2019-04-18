@@ -13,6 +13,8 @@ namespace PujcovnaAutORM.ORM
         public DateTime od { get; set; }
         public DateTime do_ { get; set; }
 
+        public string auto_spz { get; set; }
+
         public string toString()
         {
             return this.poradi_s.ToString() + " " + this.auto.spz + " " + this.od.ToString() + " " +

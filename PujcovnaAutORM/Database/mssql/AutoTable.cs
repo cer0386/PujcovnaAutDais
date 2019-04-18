@@ -10,8 +10,23 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class AutoTable
     {
-        public static String SQL_SELECT = "SELECT * FROM \"Auto\"";
-        public static String SQL_SELECT_SPZ = "SELECT * FROM \"Auto\" WHERE SPZ = @spz";
+        //public static String SQL_SELECT = "SELECT * FROM \"Auto\"";
+        public static String SQL_SELECT_SPZ = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\","+
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" WHERE SPZ = @spz";
+
+        //seznam dostupných aut podle intervalu
+        public static String SQL_SELECT_DostupnaAuta = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" " +
+            "EXCEPT "+
+            "SELECT a.\"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" a " +
+            "JOIN \"Rezervovano\" re on re.SPZ = a.SPZ "+
+            "JOIN \"Rezervace\" r on r.Cislo_Rezervace = re.Cislo_Rezervace " +
+            "JOIN \"Servis\" s on s.SPZ = a.SPZ "+
+            "WHERE ((r.Vyzvednuti< @Do AND r.Vraceni> @Od) "+
+            "OR(s.Od > @Do AND s.Do< @Od)) "+
+            "OR a.servis = 1";
+
         public static String SQL_INSERT = "INSERT INTO \"Auto \" VALUES (@spz, @model, @znacka, @zakoupeno, " +
             "@stk, @pocet_nehod, @servis, @najeto, @cena_za_den)";
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Auto\" WHERE SPZ = @spz";
@@ -76,7 +91,7 @@ namespace PujcovnaAutORM.ORM.mssql
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select the records.
         /// </summary>
@@ -106,7 +121,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return autos;
         }
-
+        */
         /// <summary>
         /// Select the record.
         /// </summary>
@@ -143,6 +158,35 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             return auto;
+        }
+
+        public Collection<Auto> select(DateTime od, DateTime do_, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_DostupnaAuta);
+            command.Parameters.AddWithValue("@od", od);
+            command.Parameters.AddWithValue("@do", do_);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Auto> autos = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return autos;
         }
 
         /// <summary>

@@ -10,9 +10,12 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class RezervovanoTable
     {
-        public static String SQL_SELECT = "SELECT * FROM \"Rezervovano\"";
-        public static String SQL_SELECT_ID_REZ = "SELECT * FROM \"Rezervovano\" WHERE Cislo_rezervace = @cislo_rezervace";
-        public static String SQL_SELECT_SPZ = "SELECT * FROM \"Rezervovano\" WHERE SPZ = @spz";
+        //public static String SQL_SELECT = "SELECT * FROM \"Rezervovano\"";
+
+        //auta na rezervaci
+        public static String SQL_SELECT_ID_REZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" "+
+            "WHERE Cislo_rezervace = @cislo_rezervace";
+        //public static String SQL_SELECT_SPZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" WHERE SPZ = @spz";
         public static String SQL_INSERT = "INSERT INTO \"Rezervovano \" VALUES (@cislo_rezervace, @spz)";
         public static String SQL_DELETE_ID_REZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezezervace = @cislo_rezervace";
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezezervace = @cislo_rezervace "+
@@ -77,7 +80,7 @@ namespace PujcovnaAutORM.ORM.mssql
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select the records.
         /// </summary>
@@ -107,7 +110,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return rezervovanos;
         }
-
+        */
         /// <summary>
         /// Select the record.
         /// </summary>
@@ -140,7 +143,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return rezervovanos;
         }
-
+        /*
         public Collection<Rezervovano> select(string spz, Database pDb = null)
         {
             Database db;
@@ -169,7 +172,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return rezervovanos;
         }
-
+        */
         /// <summary>
         /// Delete the record.
         /// </summary>
@@ -228,8 +231,8 @@ namespace PujcovnaAutORM.ORM.mssql
 
         private static void PrepareCommand(SqlCommand command, Rezervovano rezervovano)
         {
-            command.Parameters.AddWithValue("@cislo_rezervace", rezervovano.rezervace.cislo_rezervace);
-            command.Parameters.AddWithValue("@spz", rezervovano.auto.spz);
+            command.Parameters.AddWithValue("@cislo_rezervace", rezervovano.ciclo_r);
+            command.Parameters.AddWithValue("@spz", rezervovano.auto_spz);
         }
 
         private static Collection<Rezervovano> Read(SqlDataReader reader)
@@ -240,10 +243,12 @@ namespace PujcovnaAutORM.ORM.mssql
             {
                 int i = -1;
                 Rezervovano rezervovano = new Rezervovano();
-                int cRez = reader.GetInt32(++i);
-                rezervovano.rezervace = new RezervaceTable().select(cRez);
-                string spz = reader.GetString(++i);
-                rezervovano.auto = new AutoTable().select(spz);
+                rezervovano.ciclo_r = reader.GetInt32(++i);
+                rezervovano.rezervace = new Rezervace();
+                rezervovano.rezervace.cislo_rezervace = rezervovano.ciclo_r;
+                rezervovano.auto_spz = reader.GetString(++i);
+                rezervovano.auto = new Auto();
+                rezervovano.auto.spz = rezervovano.auto_spz;
                 string idZam = reader.GetString(++i);
 
                 rezervovanos.Add(rezervovano);

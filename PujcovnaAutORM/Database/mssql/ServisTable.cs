@@ -10,11 +10,15 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class ServisTable
     {
-        public static String SQL_SELECT = "SELECT * FROM \"Servis\"";
-        public static String SQL_SELECT_ID = "SELECT * FROM \"Servis\" WHERE Poradi_s = @poradi_s";
+        //public static String SQL_SELECT = "SELECT * FROM \"Servis\"";
+        public static String SQL_SELECT_ID = "SELECT \"Poradi_s\", \"SPZ\", \"Od\", \"Do\" FROM \"Servis\" WHERE Poradi_s = @poradi_s";
+
+        //Seznam servisů pro určité auto
+        public static String SQL_SELECT_ServisyAuta = "SELECT \"Poradi_s\", \"SPZ\", \"Od\", \"Do\" FROM \"Servis\" WHERE SPZ = @spz";
+
         public static String SQL_INSERT = "INSERT INTO \"Servis \" VALUES (@poradi_s, @spz, @od," +
-            "@do_";
-        public static String SQL_DELETE_ID = "DELETE FROM \"Servis\" WHERE Cislo_rezezervace = @poradi_s";
+            "@do_)";
+        public static String SQL_DELETE_ID = "DELETE FROM \"Servis\" WHERE Poradi_s = @poradi_s";
         public static String SQL_UPDATE = "UPDATE \"Servis\" SET Poradi_s=@poradi_s, SPZ=@spz, " +
             "Od=@od, Do=@do_";
 
@@ -75,7 +79,7 @@ namespace PujcovnaAutORM.ORM.mssql
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select the records.
         /// </summary>
@@ -105,7 +109,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return serviss;
         }
-
+        */
         /// <summary>
         /// Select the record.
         /// </summary>
@@ -144,6 +148,34 @@ namespace PujcovnaAutORM.ORM.mssql
             return servis;
         }
 
+        public Collection<Servis> select(string spz,Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_ServisyAuta);
+            command.Parameters.AddWithValue("@spz", spz);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Servis> serviss = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return serviss;
+        }
+
         /// <summary>
         /// Delete the record.
         /// </summary>
@@ -178,7 +210,7 @@ namespace PujcovnaAutORM.ORM.mssql
         private static void PrepareCommand(SqlCommand command, Servis servis)
         {
             command.Parameters.AddWithValue("@poradi_s", servis.poradi_s);
-            command.Parameters.AddWithValue("@spz", servis.auto.spz);
+            command.Parameters.AddWithValue("@spz", servis.auto_spz);
             command.Parameters.AddWithValue("@od", servis.od);
             command.Parameters.AddWithValue("@do_", servis.do_);
         }
@@ -192,8 +224,9 @@ namespace PujcovnaAutORM.ORM.mssql
                 int i = -1;
                 Servis servis = new Servis();
                 servis.poradi_s = reader.GetInt32(++i);
-                string spz = reader.GetString(++i);
-                servis.auto = new AutoTable().select(spz);
+                servis.auto_spz = reader.GetString(++i);
+                servis.auto = new Auto();
+                servis.auto.spz = servis.auto_spz;
                 servis.od = reader.GetDateTime(++i);
                 servis.do_ = reader.GetDateTime(++i);
 

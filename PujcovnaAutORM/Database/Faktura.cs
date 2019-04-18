@@ -14,6 +14,8 @@ namespace PujcovnaAutORM.ORM
         public DateTime? potvrzeno { get; set; }
         public DateTime? zaplaceno { get; set; }
 
+        public int cislo_r { get; set; }
+
         public string toString()
         {
             return this.cislo_faktury.ToString() + " " + this.rezervace.cislo_rezervace.ToString() +

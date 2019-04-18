@@ -10,16 +10,28 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class RezervaceTable
     {
-        public static String SQL_SELECT = "SELECT * FROM \"Rezervace\"";
-        public static String SQL_SELECT_ID = "SELECT * FROM \"Rezervace\" WHERE Cislo_rezervace = @cislo_rezervace";
-        public static String SQL_SELECT_NEXTWEEK = "SELECT * FROM \"Rezervace\" WHERE Vraceni>CAST(GETDATE() AS DATE) " +
-            "AND Vraceni<DATEADD(week,2,CAST(GETDATE() AS DATE))";
-        public static String SQL_SELECT_ZAK = "SELECT r.* FROM \"Rezervace\" WHERE Cislo_ridicskeho_prukazu=@cislo_RP ORDER BY Vyzvednuti";
-        public static String SQL_SELECT_ZAM = "SELECT * FROM \"Rezervace\" where ID_zamestnance=@idZamestnance";
-        public static String SQL_SELECT_AUTO = "SELECT * FROM \"Rezervace\" r JOIN \"Rezervovano\" re on r.Cislo_Rezervace=re.Cislo_Rezervace"+
+        //public static String SQL_SELECT = "SELECT * FROM \"Rezervace\"";
+        public static String SQL_SELECT_ID = "SELECT \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", "+
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" "
+            +"WHERE Cislo_rezervace = @cislo_rezervace";
+
+        public static String SQL_SELECT_NEXTWEEK = "SELECT \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" "+
+            "WHERE Vraceni>CAST(GETDATE() AS DATE) AND Vraceni<DATEADD(week,2,CAST(GETDATE() AS DATE))";
+
+        public static String SQL_SELECT_ZAK = "SELECT \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" WHERE Cislo_ridickeho_prukazu=@cislo_RP ORDER BY Vyzvednuti";
+
+        public static String SQL_SELECT_ZAM = "SELECT \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" WHERE ID_zamestnance=@idZamestnance";
+
+        public static String SQL_SELECT_AUTO = "SELECT r.\"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" r JOIN \"Rezervovano\" re ON r.Cislo_Rezervace=re.Cislo_Rezervace" +
             " where re.SPZ=@spz";
+
         public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES (@cislo_rezervace, @zakaznik, @zamestnanec," +
             "@vyzvednuti, @vraceni";
+
         public static String SQL_DELETE_ID = "DELETE FROM \"Rezervace\" WHERE Cislo_rezezervace = @cislo_rezervace";
         public static String SQL_UPDATE = "UPDATE \"Rezervace\" SET Cislo_rezervace=@cislo_rezervace, Zakaznik=@zakaznik, " +
             "Zamestnanec=@zamestnanec, Vyzvednuti=@vyzvednuti, Vraceni=@vraceni";
@@ -81,7 +93,7 @@ namespace PujcovnaAutORM.ORM.mssql
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select the records.
         /// </summary>
@@ -111,7 +123,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return rezervaces;
         }
-
+        */
         /// <summary>
         /// Select the records.
         /// </summary>
@@ -307,8 +319,8 @@ namespace PujcovnaAutORM.ORM.mssql
         private static void PrepareCommand(SqlCommand command, Rezervace rezervace)
         {
             command.Parameters.AddWithValue("@cislo_rezervace", rezervace.cislo_rezervace);
-            command.Parameters.AddWithValue("@zakaznik", rezervace.zakaznik.cislo_RP);
-            command.Parameters.AddWithValue("@zamestnanec", rezervace.zamestnanec.id_zamestnance);
+            command.Parameters.AddWithValue("@zakaznik", rezervace.cislo_rp);
+            command.Parameters.AddWithValue("@zamestnanec", rezervace.id_zam);
             command.Parameters.AddWithValue("@vyzvednuti", rezervace.vyzvednuti);
             command.Parameters.AddWithValue("@vraceni", rezervace.vraceni);
         }
@@ -322,10 +334,12 @@ namespace PujcovnaAutORM.ORM.mssql
                 int i = -1;
                 Rezervace rezervace = new Rezervace();
                 rezervace.cislo_rezervace = reader.GetInt32(++i);
-                string idZak = reader.GetString(++i);
-                rezervace.zakaznik = new ZakaznikTable().select(idZak);
-                string idZam = reader.GetString(++i);
-                rezervace.zamestnanec = new ZamestnanecTable().select(idZam);
+                rezervace.cislo_rp = reader.GetString(++i);
+                rezervace.zakaznik = new Zakaznik();
+                rezervace.zakaznik.cislo_RP = rezervace.cislo_rp;
+                rezervace.id_zam = reader.GetString(++i);
+                rezervace.zamestnanec = new Zamestnanec();
+                rezervace.zamestnanec.id_zamestnance = rezervace.id_zam;
                 rezervace.vyzvednuti = reader.GetDateTime(++i);
                 rezervace.vraceni = reader.GetDateTime(++i);
 

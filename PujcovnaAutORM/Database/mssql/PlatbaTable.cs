@@ -10,26 +10,44 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class PlatbaTable
     {
-        public static String TABLE_NAME = "Platba";
+        //static String SQL_SELECT = "SELECT * FROM Platba";
 
-        public static String SQL_SELECT_ID = "SELECT * FROM Platba WHERE ID_platba=@id_platba";
-        public static String SQL_SELECT = "SELECT * FROM Platba";
-        public static String SQL_INSERT = "INSERT INTO Platba VALUES (@id_platba, @faktura, @typ_platby, @castka)";
-        public static String SQL_DELETE_ID = "DELETE FROM Platba WHERE ID_platba=@id_platba";
-        public static String SQL_UPDATE = "UPDATE Platba SET Cislo_faktury=@faktura, ID_typ_platby=@typ_platby, castka=@castka WHERE ID_platba=@id_platba";
+        public static String SQL_SELECT_ID = "SELECT \"ID_platba\", \"Cislo_faktury\", \"ID_typ_platby\", \"Castka\" "+
+            "FROM \"Platba\" WHERE ID_platba=@id_platba";
+
+        //Výpis všech plateb provedených minulý měsíc - 6.5
+        public static String SQL_SELECT_ZaplacenoMinulyMesic = "SELECT \"ID_platba\", \"Cislo_faktury\", \"ID_typ_platby\", \"Castka\" " +
+            "FROM \"Platba\" JOIN \"Faktura\" f ON f.Cislo_faktury=p.Cislo_faktury " +
+            "WHERE DATEPART(m, Zaplaceno) = DATEPART(m, DATEADD(m, -1, getdate())) " +
+            "AND DATEPART(yyyy, Zaplaceno) = DATEPART(yyyy, DATEADD(m, -1, getdate())) ORDER BY ID_typ_platby";
+
+        public static String SQL_INSERT = "INSERT INTO \"Platba\" VALUES (@id_platba, @faktura, @typ_platby, @castka)";
+        public static String SQL_DELETE_ID = "DELETE FROM \"Platba\" WHERE ID_platba=@id_platba";
+        public static String SQL_UPDATE = "UPDATE \"Platba\" SET Cislo_faktury=@faktura, ID_typ_platby=@typ_platby, castka=@castka WHERE ID_platba=@id_platba";
 
         #region Abstraktní metody
         /// <summary>
         /// Insert the record.
         /// </summary>
-        public static int insert(Platba platba)
+        public static int insert(Platba platba, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_INSERT);
             PrepareCommand(command, platba);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
@@ -38,18 +56,29 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         /// <param nazev="platba"></param>
         /// <returns></returns>
-        public static int update(Platba platba)
+        public static int update(Platba platba, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_UPDATE);
             PrepareCommand(command, platba);
             int ret = db.ExecuteNonQuery(command);
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
 
-
+        /*
         /// <summary>
         /// Select records.
         /// </summary>
@@ -66,14 +95,22 @@ namespace PujcovnaAutORM.ORM.mssql
             db.Close();
             return Platbas;
         }
-
+        */
         /// <summary>
         /// Select records for platba.
         /// </summary>
-        public Platba select(int id_platba)
+        public Platba select(int id_platba, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_SELECT_ID);
 
             command.Parameters.AddWithValue("@id_platba", id_platba);
@@ -86,22 +123,36 @@ namespace PujcovnaAutORM.ORM.mssql
                 platba = platbas[0];
             }
             reader.Close();
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return platba;
         }
         /// <summary>
         /// Delete the record.
         /// </summary>
-        public static int delete(int id)
+        public static int delete(int id, Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
             SqlCommand command = db.CreateCommand(SQL_DELETE_ID);
 
             command.Parameters.AddWithValue("@id_platba", id);
             int ret = db.ExecuteNonQuery(command);
 
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return ret;
         }
         #endregion
@@ -112,8 +163,8 @@ namespace PujcovnaAutORM.ORM.mssql
         private static void PrepareCommand(SqlCommand command, Platba platba)
         {
             command.Parameters.AddWithValue("@id_platba", platba.id_platba);
-            command.Parameters.AddWithValue("@nazev", platba.faktura.cislo_faktury);
-            command.Parameters.AddWithValue("@nazev", platba.typ_platby.id_typ_platby);
+            command.Parameters.AddWithValue("@nazev", platba.cislo_f);
+            command.Parameters.AddWithValue("@nazev", platba.typ_pl);
             command.Parameters.AddWithValue("@nazev", platba.castka);
         }
 
@@ -127,10 +178,12 @@ namespace PujcovnaAutORM.ORM.mssql
                 Platba platba = new Platba();
                 int i = -1;
                 platba.id_platba = reader.GetInt32(++i);
-                int cislo_fak = reader.GetInt32(++i);
-                platba.faktura = new FakturaTable().select(cislo_fak);
-                int id_p = reader.GetInt32(++i);
-                platba.typ_platby = new Typ_platbyTable().select(id_p);
+                platba.cislo_f = reader.GetInt32(++i);
+                platba.faktura = new Faktura();
+                platba.faktura.cislo_faktury = platba.cislo_f;
+                platba.typ_pl = reader.GetInt32(++i);
+                platba.typ_platby = new Typ_platby();
+                platba.typ_platby.id_typ_platby = platba.typ_pl;
                 platba.castka = reader.GetInt32(++i);
 
                 platbas.Add(platba);

@@ -13,6 +13,9 @@ namespace PujcovnaAutORM.ORM
         public Typ_platby typ_platby { get; set; }
         public int castka { get; set; }
 
+        public int cislo_f { get; set; }
+        public int typ_pl { get; set; }
+
         public string toString()
         {
             return this.id_platba.ToString() + " " + this.faktura.cislo_faktury.ToString() +
