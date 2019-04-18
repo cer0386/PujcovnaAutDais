@@ -24,7 +24,7 @@ namespace PujcovnaAutORM.ORM.mssql
             "WHERE Cislo_ridickeho_prukazu=@cisloRP";
 
         public static String SQL_INSERT = "INSERT INTO \"Faktura \" VALUES (@cislo_faktury, @rezervace, @vytvoreno," +
-            "@potvrzeno, @zaplaceno";
+            "@potvrzeno, @zaplaceno)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Faktura\" WHERE Cislo_faktury = @cislo_faktury";
         public static String SQL_UPDATE = "UPDATE \"Faktura\" SET Cislo_faktury=@cislo_faktury, Cislo_rezervace=@rezervace, " +
@@ -250,11 +250,11 @@ namespace PujcovnaAutORM.ORM.mssql
 
         private static void PrepareCommand(SqlCommand command, Faktura faktura)
         {
-            command.Parameters.AddWithValue("@cislo_faktura", faktura.cislo_faktury);
+            command.Parameters.AddWithValue("@cislo_faktury", faktura.cislo_faktury);
             command.Parameters.AddWithValue("@rezervace", faktura.cislo_r);
-            command.Parameters.AddWithValue("@zamestnanec", faktura.vytvoreno);
-            command.Parameters.AddWithValue("@vyzvednuti", faktura.potvrzeno == null ? DBNull.Value : (object)faktura.potvrzeno);
-            command.Parameters.AddWithValue("@vraceni", faktura.zaplaceno == null ? DBNull.Value : (object)faktura.zaplaceno);
+            command.Parameters.AddWithValue("@vytvoreno", faktura.vytvoreno);
+            command.Parameters.AddWithValue("@potvrzeno", faktura.potvrzeno == null ? DBNull.Value : (object)faktura.potvrzeno);
+            command.Parameters.AddWithValue("@zaplaceno", faktura.zaplaceno == null ? DBNull.Value : (object)faktura.zaplaceno);
         }
 
         private static Collection<Faktura> Read(SqlDataReader reader)
@@ -271,10 +271,11 @@ namespace PujcovnaAutORM.ORM.mssql
                 faktura.rezervace.cislo_rezervace = faktura.cislo_r;
                 faktura.vytvoreno = reader.GetDateTime(++i);
 
-                if (!reader.IsDBNull(i++)){
+                if (!reader.IsDBNull(++i)){
                     faktura.potvrzeno = reader.GetDateTime(i);
                 }
-                if (!reader.IsDBNull(i++))
+                //i++;
+                if (!reader.IsDBNull(++i))
                 {
                     faktura.zaplaceno = reader.GetDateTime(i);
                 }

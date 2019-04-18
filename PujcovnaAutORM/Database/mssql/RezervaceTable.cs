@@ -15,6 +15,8 @@ namespace PujcovnaAutORM.ORM.mssql
             "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" "
             +"WHERE Cislo_rezervace = @cislo_rezervace";
 
+        public static String SQL_SELECT_MAXCisloR = "SELECT MAX(Cislo_rezervace) FROM \"Rezervace\""; 
+
         public static String SQL_SELECT_NEXTWEEK = "SELECT \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
             "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" "+
             "WHERE Vraceni>CAST(GETDATE() AS DATE) AND Vraceni<DATEADD(week,2,CAST(GETDATE() AS DATE))";
@@ -29,8 +31,8 @@ namespace PujcovnaAutORM.ORM.mssql
             "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" r JOIN \"Rezervovano\" re ON r.Cislo_Rezervace=re.Cislo_Rezervace" +
             " where re.SPZ=@spz";
 
-        public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES (@cislo_rezervace, @zakaznik, @zamestnanec," +
-            "@vyzvednuti, @vraceni";
+        public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES ( @zakaznik, @zamestnanec," +
+            "@vyzvednuti, @vraceni)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Rezervace\" WHERE Cislo_rezezervace = @cislo_rezervace";
         public static String SQL_UPDATE = "UPDATE \"Rezervace\" SET Cislo_rezervace=@cislo_rezervace, Zakaznik=@zakaznik, " +
@@ -283,6 +285,33 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             return rezervace;
+        }
+
+        public int selectMax( Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_MAXCisloR);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int maxVal = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return maxVal;
         }
 
         /// <summary>

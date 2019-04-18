@@ -249,7 +249,6 @@ namespace PujcovnaAutORM.ORM.mssql
                 rezervovano.auto_spz = reader.GetString(++i);
                 rezervovano.auto = new Auto();
                 rezervovano.auto.spz = rezervovano.auto_spz;
-                string idZam = reader.GetString(++i);
 
                 rezervovanos.Add(rezervovano);
             }

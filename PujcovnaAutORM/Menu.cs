@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PujcovnaAutORM.ORM;
+using PujcovnaAutORM.ORM.mssql;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,6 +36,18 @@ namespace PujcovnaAutORM
         private void RezDalsiTyd_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void hledatRezB_Click(object sender, EventArgs e)
+        {
+            int cisloRezervace = (int)cisloRIn.Value;
+
+            Rezervace rezervace = new RezervaceTable().select(cisloRezervace);
+
+            BindingSource binding = new BindingSource();
+            binding.DataSource = rezervace;
+
+            detailRez.DataSource = binding;
         }
     }
 }

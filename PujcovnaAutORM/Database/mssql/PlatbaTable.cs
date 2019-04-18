@@ -163,9 +163,9 @@ namespace PujcovnaAutORM.ORM.mssql
         private static void PrepareCommand(SqlCommand command, Platba platba)
         {
             command.Parameters.AddWithValue("@id_platba", platba.id_platba);
-            command.Parameters.AddWithValue("@nazev", platba.cislo_f);
-            command.Parameters.AddWithValue("@nazev", platba.typ_pl);
-            command.Parameters.AddWithValue("@nazev", platba.castka);
+            command.Parameters.AddWithValue("@faktura", platba.cislo_f);
+            command.Parameters.AddWithValue("@typ_platby", platba.typ_pl);
+            command.Parameters.AddWithValue("@castka", platba.castka);
         }
 
 

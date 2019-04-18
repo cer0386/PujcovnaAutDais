@@ -21,7 +21,7 @@ namespace PujcovnaAutORM.ORM
         public string toString()
         {
             return this.id_zamestnance + " " + this.pozice.id_pozice.ToString() + " " + this.jmeno + " " +
-                this.prijmeni + " " + this.email;
+                this.prijmeni + " " + this.email + " " + this.pocetRezervaci;
         }
     }
 }
