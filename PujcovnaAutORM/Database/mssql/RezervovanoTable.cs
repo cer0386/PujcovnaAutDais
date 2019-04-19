@@ -12,9 +12,11 @@ namespace PujcovnaAutORM.ORM.mssql
     {
         //public static String SQL_SELECT = "SELECT * FROM \"Rezervovano\"";
 
-        //auta na rezervaci
+        //vypis tabulky rezervovano podle id rezervace
         public static String SQL_SELECT_ID_REZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" "+
             "WHERE Cislo_rezervace = @cislo_rezervace";
+
+        
         //public static String SQL_SELECT_SPZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" WHERE SPZ = @spz";
         public static String SQL_INSERT = "INSERT INTO \"Rezervovano \" VALUES (@cislo_rezervace, @spz)";
 
@@ -115,6 +117,7 @@ namespace PujcovnaAutORM.ORM.mssql
             return rezervovanos;
         }
         */
+
         /// <summary>
         /// Select the record.
         /// </summary>

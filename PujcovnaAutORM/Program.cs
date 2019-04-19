@@ -280,10 +280,12 @@ namespace PujcovnaAutORM
             
             Console.WriteLine(new PlatbaTable().select(pl1.id_platba, db).toString());
 
-            Console.WriteLine("\n---------------------------------------------------------------------------\n");
-            Console.WriteLine("\n---------------------------------------------------------------------------\n");
-            Console.WriteLine("\n---------------------------------------------------------------------------\n");
-            Console.WriteLine("\n---------------------------------------------------------------------------\n");
+            Console.WriteLine("\n---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------\n");
+            Console.WriteLine("                                Výpis Seznamů                                \n");
+            
             //seznamy
             Console.WriteLine("Seznam všech zákazníků, seřazených dle jména");
             Collection<Zakaznik> zakazniks = new ZakaznikTable().select(db);
@@ -380,6 +382,22 @@ namespace PujcovnaAutORM
                 Console.WriteLine(item.toString());
             }
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
+
+            //Auta na rezervaci v podobě Collectionu v rezervaci
+            Console.WriteLine("");
+            r1 = new RezervaceTable().selectCollection(r1.cislo_rezervace);
+            Console.WriteLine("Číslo rezervace: " + r1.cislo_rezervace + "\n Auta:");
+            foreach(Auto auto in r1.autaNaRez)
+            {
+                Console.WriteLine(auto.toString());
+            }
+
+
+            Console.WriteLine("\n---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------");
+            Console.WriteLine("---------------------------------------------------------------------------\n");
+            Console.WriteLine("                        Výpis netriviálních funkcí                  \n");
 
 
             //Procedury a funkce

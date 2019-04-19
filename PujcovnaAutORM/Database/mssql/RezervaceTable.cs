@@ -292,6 +292,44 @@ namespace PujcovnaAutORM.ORM.mssql
             return rezervace;
         }
 
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">rezervace id</param>
+        public Rezervace selectCollection(int cislo_rezervace, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_ID);
+
+            command.Parameters.AddWithValue("@cislo_rezervace", cislo_rezervace);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read2(reader);
+            Rezervace rezervace = null;
+            if (rezervaces.Count == 1)
+            {
+                rezervace = rezervaces[0];
+            }
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervace;
+        }
+
         public int selectMax( Database pDb = null)
         {
             Database db;
@@ -376,6 +414,31 @@ namespace PujcovnaAutORM.ORM.mssql
                 rezervace.zamestnanec.id_zamestnance = rezervace.id_zam;
                 rezervace.vyzvednuti = reader.GetDateTime(++i);
                 rezervace.vraceni = reader.GetDateTime(++i);
+
+                rezervaces.Add(rezervace);
+            }
+
+            return rezervaces;
+        }
+
+        private static Collection<Rezervace> Read2(SqlDataReader reader)
+        {
+            Collection<Rezervace> rezervaces = new Collection<Rezervace>();
+
+            while (reader.Read())
+            {
+                int i = -1;
+                Rezervace rezervace = new Rezervace();
+                rezervace.cislo_rezervace = reader.GetInt32(++i);
+                rezervace.cislo_rp = reader.GetString(++i);
+                rezervace.zakaznik = new Zakaznik();
+                rezervace.zakaznik.cislo_RP = rezervace.cislo_rp;
+                rezervace.id_zam = reader.GetString(++i);
+                rezervace.zamestnanec = new Zamestnanec();
+                rezervace.zamestnanec.id_zamestnance = rezervace.id_zam;
+                rezervace.vyzvednuti = reader.GetDateTime(++i);
+                rezervace.vraceni = reader.GetDateTime(++i);
+                rezervace.autaNaRez = new AutoTable().selectAuta(rezervace.cislo_rezervace);
 
                 rezervaces.Add(rezervace);
             }

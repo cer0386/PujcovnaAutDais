@@ -15,6 +15,10 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT_SPZ = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\","+
             "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" WHERE SPZ = @spz";
 
+        //auta na rezervaci
+        public static String SQL_SELECT_AutaNaRez = "SELECT a.\"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Rezervovano\" re JOIN \"Auto\" a on a.SPZ=re.SPZ WHERE Cislo_rezervace=@cislo_rezervace";
+
         //pocet rezervací auta v zadaném intervalu
         public static String SQL_SELECT_PocetRez = "SELECT COUNT(r.Cislo_rezervace) FROM \"Rezervace\" r JOIN \"Rezervovano\" re " +
             "ON re.Cislo_Rezervace = r.Cislo_Rezervace WHERE r.Vyzvednuti < @Do AND r.Vraceni > @Od AND SPZ = @spz";
@@ -223,6 +227,39 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return ret;
         }
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">rezervovano id</param>
+        public Collection<Auto> selectAuta(int cislo_rezervace, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_AutaNaRez);
+
+            command.Parameters.AddWithValue("@cislo_rezervace", cislo_rezervace);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Auto> auta = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return auta;
+        }
+
 
         /*
         /// <summary>

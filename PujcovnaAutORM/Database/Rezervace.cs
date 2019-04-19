@@ -14,6 +14,8 @@ namespace PujcovnaAutORM.ORM
         public DateTime vyzvednuti { get; set; }
         public DateTime vraceni { get; set; }
         
+        public ICollection<Auto> autaNaRez { get; set; }
+
         public string cislo_rp { get; set; }
         public string id_zam { get; set; }
 
