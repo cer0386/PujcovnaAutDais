@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,16 +14,77 @@ namespace PujcovnaAutORM.ORM.mssql
         //public static String SQL_SELECT = "SELECT * FROM \"Servis\"";
         public static String SQL_SELECT_ID = "SELECT \"Poradi_s\", \"SPZ\", \"Od\", \"Do\" FROM \"Servis\" WHERE Poradi_s = @poradi_s";
 
+        //Zjištění nejnovějšího pořadí servisu pro výpis v ORM
+        public static String SQL_SELECT_MAXServis= "SELECT MAX(Poradi_s) FROM \"Servis\"";
+
+        //Zjištění stavu auta (atribut servis)
+        public static String SQL_SELECT_status = "SELECT \"Servis\" FROM \"Auto\" WHERE SPZ=@spz";
+
         //Seznam servisů pro určité auto
         public static String SQL_SELECT_ServisyAuta = "SELECT \"Poradi_s\", \"SPZ\", \"Od\", \"Do\" FROM \"Servis\" WHERE SPZ = @spz";
 
-        public static String SQL_INSERT = "INSERT INTO \"Servis \" VALUES (@poradi_s, @spz, @od," +
+        public static String SQL_INSERT = "INSERT INTO \"Servis \" VALUES (@spz, @od," +
             "@do_)";
         public static String SQL_DELETE_ID = "DELETE FROM \"Servis\" WHERE Poradi_s = @poradi_s";
         public static String SQL_UPDATE = "UPDATE \"Servis\" SET Poradi_s=@poradi_s, SPZ=@spz, " +
             "Od=@od, Do=@do_";
 
         #region Abstraktní metody
+
+        //Uložená procedura
+        public static int novyServis(string spz, DateTime dOd, DateTime dDo, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+            SqlCommand command = db.CreateCommand("NovyServis");
+            command.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter input = new SqlParameter();
+            input.ParameterName = "@p_spz";
+            input.DbType = DbType.String;
+            input.Value = spz;
+            input.Direction = ParameterDirection.Input;
+            command.Parameters.Add(input);
+
+            SqlParameter input1 = new SqlParameter();
+            input1.ParameterName = "@p_od";
+            input1.DbType = DbType.Date;
+            input1.Value = dOd;
+            input1.Direction = ParameterDirection.Input;
+            command.Parameters.Add(input1);
+
+            SqlParameter input2 = new SqlParameter();
+            input2.ParameterName = "@p_do";
+            input2.DbType = DbType.Date;
+            input2.Value = dDo;
+            input2.Direction = ParameterDirection.Input;
+            command.Parameters.Add(input2);
+
+            SqlParameter output = new SqlParameter();
+            output.Direction = ParameterDirection.ReturnValue;
+            output.DbType = DbType.Int32;
+            output.ParameterName = "@ReturnValue";
+            command.Parameters.Add(output);
+
+            db.ExecuteNonQuery(command);
+
+            int ret = Convert.ToInt32(command.Parameters["@ReturnValue"].Value);
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+            return ret;
+        }
+
         /// <summary>
         /// Insert the record.
         /// </summary>
@@ -146,6 +208,67 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             return servis;
+        }
+
+        public int selectMax(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_MAXServis);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int maxVal = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return maxVal;
+        }
+
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">servis id</param>
+        public bool selectStatus(string spz, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_status);
+
+            command.Parameters.AddWithValue("@spz", spz);
+            SqlDataReader reader = db.Select(command);
+
+            reader.Read();
+            bool status = reader.GetBoolean(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return status;
         }
 
         public Collection<Servis> select(string spz,Database pDb = null)

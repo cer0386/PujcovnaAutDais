@@ -38,15 +38,17 @@
             this.odebratZakB = new System.Windows.Forms.Button();
             this.vytvoritRezB = new System.Windows.Forms.Button();
             this.dostupnaAuta = new System.Windows.Forms.DataGridView();
-            this.rekapRez = new System.Windows.Forms.ListBox();
             this.autaNaRez = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.odebratAutoB = new System.Windows.Forms.Button();
             this.pridatAutoB = new System.Windows.Forms.Button();
+            this.vlozitD = new System.Windows.Forms.Button();
+            this.rekapRez = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dostupnaAuta)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.autaNaRez)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rekapRez)).BeginInit();
             this.SuspendLayout();
             // 
             // DatOd
@@ -55,6 +57,7 @@
             this.DatOd.Name = "DatOd";
             this.DatOd.Size = new System.Drawing.Size(163, 20);
             this.DatOd.TabIndex = 0;
+            this.DatOd.ValueChanged += new System.EventHandler(this.DatOd_ValueChanged);
             // 
             // datDo
             // 
@@ -62,6 +65,7 @@
             this.datDo.Name = "datDo";
             this.datDo.Size = new System.Drawing.Size(163, 20);
             this.datDo.TabIndex = 1;
+            this.datDo.ValueChanged += new System.EventHandler(this.datDo_ValueChanged);
             // 
             // label1
             // 
@@ -84,7 +88,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 138);
+            this.label3.Location = new System.Drawing.Point(12, 186);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(124, 13);
             this.label3.TabIndex = 4;
@@ -92,14 +96,14 @@
             // 
             // cisloRPText
             // 
-            this.cisloRPText.Location = new System.Drawing.Point(12, 154);
+            this.cisloRPText.Location = new System.Drawing.Point(12, 202);
             this.cisloRPText.Name = "cisloRPText";
             this.cisloRPText.Size = new System.Drawing.Size(163, 20);
             this.cisloRPText.TabIndex = 5;
             // 
             // pridatZakB
             // 
-            this.pridatZakB.Location = new System.Drawing.Point(15, 203);
+            this.pridatZakB.Location = new System.Drawing.Point(15, 251);
             this.pridatZakB.Name = "pridatZakB";
             this.pridatZakB.Size = new System.Drawing.Size(105, 41);
             this.pridatZakB.TabIndex = 6;
@@ -108,7 +112,7 @@
             // 
             // odebratZakB
             // 
-            this.odebratZakB.Location = new System.Drawing.Point(15, 250);
+            this.odebratZakB.Location = new System.Drawing.Point(15, 298);
             this.odebratZakB.Name = "odebratZakB";
             this.odebratZakB.Size = new System.Drawing.Size(105, 41);
             this.odebratZakB.TabIndex = 7;
@@ -117,7 +121,7 @@
             // 
             // vytvoritRezB
             // 
-            this.vytvoritRezB.Location = new System.Drawing.Point(208, 397);
+            this.vytvoritRezB.Location = new System.Drawing.Point(181, 397);
             this.vytvoritRezB.Name = "vytvoritRezB";
             this.vytvoritRezB.Size = new System.Drawing.Size(105, 41);
             this.vytvoritRezB.TabIndex = 8;
@@ -127,31 +131,23 @@
             // dostupnaAuta
             // 
             this.dostupnaAuta.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dostupnaAuta.Location = new System.Drawing.Point(411, 40);
+            this.dostupnaAuta.Location = new System.Drawing.Point(491, 40);
             this.dostupnaAuta.Name = "dostupnaAuta";
-            this.dostupnaAuta.Size = new System.Drawing.Size(313, 342);
+            this.dostupnaAuta.Size = new System.Drawing.Size(326, 342);
             this.dostupnaAuta.TabIndex = 9;
-            // 
-            // rekapRez
-            // 
-            this.rekapRez.FormattingEnabled = true;
-            this.rekapRez.Location = new System.Drawing.Point(208, 40);
-            this.rekapRez.Name = "rekapRez";
-            this.rekapRez.Size = new System.Drawing.Size(188, 342);
-            this.rekapRez.TabIndex = 10;
             // 
             // autaNaRez
             // 
             this.autaNaRez.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.autaNaRez.Location = new System.Drawing.Point(730, 40);
+            this.autaNaRez.Location = new System.Drawing.Point(823, 40);
             this.autaNaRez.Name = "autaNaRez";
-            this.autaNaRez.Size = new System.Drawing.Size(295, 342);
+            this.autaNaRez.Size = new System.Drawing.Size(312, 342);
             this.autaNaRez.TabIndex = 11;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(205, 24);
+            this.label4.Location = new System.Drawing.Point(178, 24);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 13);
             this.label4.TabIndex = 12;
@@ -160,7 +156,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(408, 24);
+            this.label5.Location = new System.Drawing.Point(501, 24);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 13);
             this.label5.TabIndex = 13;
@@ -177,7 +173,7 @@
             // 
             // odebratAutoB
             // 
-            this.odebratAutoB.Location = new System.Drawing.Point(730, 397);
+            this.odebratAutoB.Location = new System.Drawing.Point(823, 397);
             this.odebratAutoB.Name = "odebratAutoB";
             this.odebratAutoB.Size = new System.Drawing.Size(105, 41);
             this.odebratAutoB.TabIndex = 15;
@@ -186,25 +182,44 @@
             // 
             // pridatAutoB
             // 
-            this.pridatAutoB.Location = new System.Drawing.Point(411, 397);
+            this.pridatAutoB.Location = new System.Drawing.Point(491, 397);
             this.pridatAutoB.Name = "pridatAutoB";
             this.pridatAutoB.Size = new System.Drawing.Size(105, 41);
             this.pridatAutoB.TabIndex = 16;
             this.pridatAutoB.Text = "Přidat auto";
             this.pridatAutoB.UseVisualStyleBackColor = true;
             // 
+            // vlozitD
+            // 
+            this.vlozitD.Location = new System.Drawing.Point(12, 120);
+            this.vlozitD.Name = "vlozitD";
+            this.vlozitD.Size = new System.Drawing.Size(105, 41);
+            this.vlozitD.TabIndex = 17;
+            this.vlozitD.Text = "Vložit datum";
+            this.vlozitD.UseVisualStyleBackColor = true;
+            this.vlozitD.Click += new System.EventHandler(this.vlozitD_Click);
+            // 
+            // rekapRez
+            // 
+            this.rekapRez.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.rekapRez.Location = new System.Drawing.Point(181, 40);
+            this.rekapRez.Name = "rekapRez";
+            this.rekapRez.Size = new System.Drawing.Size(304, 342);
+            this.rekapRez.TabIndex = 18;
+            // 
             // NovaRezervace
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1037, 450);
+            this.ClientSize = new System.Drawing.Size(1137, 450);
+            this.Controls.Add(this.rekapRez);
+            this.Controls.Add(this.vlozitD);
             this.Controls.Add(this.pridatAutoB);
             this.Controls.Add(this.odebratAutoB);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.autaNaRez);
-            this.Controls.Add(this.rekapRez);
             this.Controls.Add(this.dostupnaAuta);
             this.Controls.Add(this.vytvoritRezB);
             this.Controls.Add(this.odebratZakB);
@@ -220,6 +235,7 @@
             this.Load += new System.EventHandler(this.NovaRezervace_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dostupnaAuta)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autaNaRez)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rekapRez)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,12 +253,13 @@
         private System.Windows.Forms.Button odebratZakB;
         private System.Windows.Forms.Button vytvoritRezB;
         private System.Windows.Forms.DataGridView dostupnaAuta;
-        private System.Windows.Forms.ListBox rekapRez;
         private System.Windows.Forms.DataGridView autaNaRez;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button odebratAutoB;
         private System.Windows.Forms.Button pridatAutoB;
+        private System.Windows.Forms.Button vlozitD;
+        private System.Windows.Forms.DataGridView rekapRez;
     }
 }

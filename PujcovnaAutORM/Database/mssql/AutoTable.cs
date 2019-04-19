@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,14 @@ namespace PujcovnaAutORM.ORM.mssql
         //public static String SQL_SELECT = "SELECT * FROM \"Auto\"";
         public static String SQL_SELECT_SPZ = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\","+
             "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" WHERE SPZ = @spz";
+
+        //pocet rezervací auta v zadaném intervalu
+        public static String SQL_SELECT_PocetRez = "SELECT COUNT(r.Cislo_rezervace) FROM \"Rezervace\" r JOIN \"Rezervovano\" re " +
+            "ON re.Cislo_Rezervace = r.Cislo_Rezervace WHERE r.Vyzvednuti < @Do AND r.Vraceni > @Od AND SPZ = @spz";
+
+        //Počet budoucích rezervací(kontrola jestli je auto zapůjčeno)
+        public static String SQL_SELECT_KontrolaZapujceni = "SELECT COUNT(r.Cislo_rezervace) FROM \"Rezervace\" r JOIN \"Rezervovano\" re " +
+            "ON re.Cislo_Rezervace = r.Cislo_Rezervace WHERE r.Vraceni > @Od AND SPZ = @spz";
 
         //seznam dostupných aut podle intervalu
         public static String SQL_SELECT_DostupnaAuta = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
@@ -27,14 +36,84 @@ namespace PujcovnaAutORM.ORM.mssql
             "OR(s.Od > @Do AND s.Do< @Od)) "+
             "OR a.servis = 1";
 
+        //seznam dostupných aut z podobné cenové relace
+        public static String SQL_SELECT_PodobneAuta = "SELECT \"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" WHERE Cena_za_den BETWEEN (@cena_za_denA - 200) AND (@cena_za_denA +200) " +
+            "EXCEPT "+
+            "SELECT a.\"SPZ\", \"Model\", \"Znacka\", \"Zakoupeno\", \"STK\", \"Pocet_nehod\"," +
+            "\"Servis\", \"Najeto\", \"Cena_za_den\" FROM \"Auto\" a " +
+            "JOIN \"Rezervovano\" re on re.SPZ = a.SPZ " +
+            "JOIN \"Rezervace\" r on re.Cislo_rezervace = r.Cislo_rezervace "+
+            "WHERE r.Vyzvednuti<@vraceni AND r.Vraceni> @vyzvednuti";
+
+
         public static String SQL_INSERT = "INSERT INTO \"Auto \" VALUES (@spz, @model, @znacka, @zakoupeno, " +
             "@stk, @pocet_nehod, @servis, @najeto, @cena_za_den)";
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Auto\" WHERE SPZ = @spz";
         public static String SQL_UPDATE = "UPDATE \"Auto\" SET SPZ=@spz, Model=@model, " +
             "Znacka=@znacka, Zakoupeno=@zakoupeno, STK=@stk, Pocet_nehod=@pocet_nehod, Servis=@servis,najeto=@najeto" +
             "Cena_za_den=@cena_za_den";
+        public static String SQL_UPDATE_Servis = "UPDATE \"Auto\" SET Servis=@servis WHERE SPZ=@spz";
+
+        public static String SQL_UPDATE_NahraditAuta = "UPDATE \"Rezervovano\" SET SPZ = @newSPZ where Cislo_rezervace = (SELECT DISTINCT(r.Cislo_Rezervace) FROM \"Rezervovano\" re " +
+            "JOIN \"Rezervace\" r on r.Cislo_rezervace = re.Cislo_Rezervace " +
+            "WHERE spz=@spz AND " +
+            "(r.Vraceni > @vyzvednuti AND r.Vyzvednuti<@vraceni))"; 
+
 
         #region Abstraktní metody
+
+        //vyřazení auta Uložená proscedura, vracející data pro vyzvednutí a vrácení
+        public Collection<DateTime> vyrazeniAutaData(string spz, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+            SqlCommand command = db.CreateCommand("VyraditAutoData");
+            command.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter input = new SqlParameter();
+            input.ParameterName = "@p_spz";
+            input.DbType = DbType.String;
+            input.Value = spz;
+            input.Direction = ParameterDirection.Input;
+            command.Parameters.Add(input);
+
+            SqlParameter output2 = new SqlParameter();
+            output2.Direction = ParameterDirection.Output;
+            output2.DbType = DbType.Date;
+            output2.ParameterName = "@vyzvednuti";
+            command.Parameters.Add(output2);
+
+            SqlParameter output3 = new SqlParameter();
+            output3.Direction = ParameterDirection.Output;
+            output3.DbType = DbType.Date;
+            output3.ParameterName = "@vraceni";
+            command.Parameters.Add(output3);
+
+            db.ExecuteNonQuery(command);
+
+            DateTime vyz = Convert.ToDateTime(command.Parameters["@vyzvednuti"].Value);
+            DateTime vrac = Convert.ToDateTime(command.Parameters["@vraceni"].Value);
+
+            Collection<DateTime> data = new Collection<DateTime>();
+            data.Add(vyz);
+            data.Add(vrac);
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+            return data;
+        }
+
         /// <summary>
         /// Insert the record.
         /// </summary>
@@ -81,6 +160,60 @@ namespace PujcovnaAutORM.ORM.mssql
 
             SqlCommand command = db.CreateCommand(SQL_UPDATE);
             PrepareCommand(command, auto);
+            int ret = db.ExecuteNonQuery(command);
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return ret;
+        }
+
+        public int updateServis(string spz, bool servis, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_UPDATE_Servis);
+            command.Parameters.AddWithValue("@spz", spz);
+            command.Parameters.AddWithValue("@servis", servis);
+            int ret = db.ExecuteNonQuery(command);
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return ret;
+        }
+
+        public int updateRez(string spz, string newSPZ, DateTime vyz, DateTime vrac, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_UPDATE_NahraditAuta);
+            command.Parameters.AddWithValue("@spz", spz);
+            command.Parameters.AddWithValue("@newSPZ", newSPZ);
+            command.Parameters.AddWithValue("@vyzvednuti", vyz);
+            command.Parameters.AddWithValue("@vraceni", vrac);
             int ret = db.ExecuteNonQuery(command);
 
             if (pDb == null)
@@ -160,6 +293,75 @@ namespace PujcovnaAutORM.ORM.mssql
             return auto;
         }
 
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">auto id</param>
+        public int selectPocetRez(string spz, DateTime vyz, DateTime vra, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_PocetRez);
+
+            command.Parameters.AddWithValue("@spz", spz);
+            command.Parameters.AddWithValue("@Od", vyz);
+            command.Parameters.AddWithValue("@Do", vra);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int pocet = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return pocet;
+        }
+
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">auto id</param>
+        public int selectPocetBudRez(string spz, DateTime vra, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_KontrolaZapujceni);
+
+            command.Parameters.AddWithValue("@spz", spz);
+            command.Parameters.AddWithValue("@Do", vra);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int pocet = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return pocet;
+        }
+
         public Collection<Auto> select(DateTime od, DateTime do_, Database pDb = null)
         {
             Database db;
@@ -174,8 +376,38 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             SqlCommand command = db.CreateCommand(SQL_SELECT_DostupnaAuta);
-            command.Parameters.AddWithValue("@od", od);
-            command.Parameters.AddWithValue("@do", do_);
+            command.Parameters.AddWithValue("@Od", od);
+            command.Parameters.AddWithValue("@Do", do_);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Auto> autos = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return autos;
+        }
+
+        public Collection<Auto> select(DateTime od, DateTime do_, int cenaZaDen, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_PodobneAuta);
+            command.Parameters.AddWithValue("@vyzvednuti", od);
+            command.Parameters.AddWithValue("@vraceni", do_);
+            command.Parameters.AddWithValue("@cena_za_denA ", cenaZaDen);
             SqlDataReader reader = db.Select(command);
 
             Collection<Auto> autos = Read(reader);

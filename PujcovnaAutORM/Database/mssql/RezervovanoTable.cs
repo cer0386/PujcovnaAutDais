@@ -17,8 +17,12 @@ namespace PujcovnaAutORM.ORM.mssql
             "WHERE Cislo_rezervace = @cislo_rezervace";
         //public static String SQL_SELECT_SPZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" WHERE SPZ = @spz";
         public static String SQL_INSERT = "INSERT INTO \"Rezervovano \" VALUES (@cislo_rezervace, @spz)";
-        public static String SQL_DELETE_ID_REZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezezervace = @cislo_rezervace";
-        public static String SQL_DELETE_SPZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezezervace = @cislo_rezervace "+
+
+        //smazání všech aut na rezervaci
+        public static String SQL_DELETE_ID_REZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezervace = @cislo_rezervace";
+
+        //smazání auta z rezervace
+        public static String SQL_DELETE_SPZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezervace = @cislo_rezervace "+
             "SPZ=@spz";
         public static String SQL_UPDATE = "UPDATE \"Rezervovano\" SET Cislo_rezervace=@cislo_rezervace, SPZ=@spz " +
             "WHERE Cislo_rezervace=@Cislo_rezervace AND SPZ=@spz";

@@ -49,5 +49,11 @@ namespace PujcovnaAutORM
 
             detailRez.DataSource = binding;
         }
+
+        private void novaRezB_Click(object sender, EventArgs e)
+        {
+            NovaRezervace nr = new NovaRezervace();
+            nr.Show();
+        }
     }
 }

@@ -14,6 +14,9 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT_ID = "SELECT \"Cislo_faktury\", \"Cislo_rezervace\", \"Vytvoreno\", \"Potvrzeno\", \"Zaplaceno\" "+
             "FROM \"Faktura\" WHERE Cislo_faktury = @cislo_faktury";
 
+        //Zjištění nejnovějšího čísla faktury
+        public static String SQL_SELECT_MAXCisloF = "SELECT MAX(Cislo_faktury) FROM \"Faktura\"";
+
         //Seznam nezaplacených faktur
         public static String SQL_SELECT_NEZAPLACENE = "SELECT \"Cislo_faktury\", \"Cislo_rezervace\", \"Vytvoreno\", \"Potvrzeno\", \"Zaplaceno\" " +
             "FROM \"Faktura\" WHERE Zaplaceno IS NULL";
@@ -23,7 +26,7 @@ namespace PujcovnaAutORM.ORM.mssql
             "\"Zaplaceno\" FROM \"Faktura\" f JOIN \"Rezervace\" r ON r.Cislo_rezervace = f.Cislo_rezervace " +
             "WHERE Cislo_ridickeho_prukazu=@cisloRP";
 
-        public static String SQL_INSERT = "INSERT INTO \"Faktura \" VALUES (@cislo_faktury, @rezervace, @vytvoreno," +
+        public static String SQL_INSERT = "INSERT INTO \"Faktura \" VALUES (@rezervace, @vytvoreno," +
             "@potvrzeno, @zaplaceno)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Faktura\" WHERE Cislo_faktury = @cislo_faktury";
@@ -215,6 +218,33 @@ namespace PujcovnaAutORM.ORM.mssql
             }
 
             return fakturas;
+        }
+
+        public int selectMax(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_MAXCisloF);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int maxVal = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return maxVal;
         }
 
         /// <summary>

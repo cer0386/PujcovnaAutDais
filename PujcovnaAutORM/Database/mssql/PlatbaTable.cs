@@ -15,13 +15,16 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT_ID = "SELECT \"ID_platba\", \"Cislo_faktury\", \"ID_typ_platby\", \"Castka\" "+
             "FROM \"Platba\" WHERE ID_platba=@id_platba";
 
-        //Výpis všech plateb provedených minulý měsíc - 6.5
-        public static String SQL_SELECT_ZaplacenoMinulyMesic = "SELECT \"ID_platba\", \"Cislo_faktury\", \"ID_typ_platby\", \"Castka\" " +
-            "FROM \"Platba\" JOIN \"Faktura\" f ON f.Cislo_faktury=p.Cislo_faktury " +
+        //Zjištění nejnovějšího čísla platby
+        public static String SQL_SELECT_MAXCisloP = "SELECT MAX(ID_platba) FROM \"Platba\"";
+
+        //Výpis všech plateb provedených minulý měsíc
+        public static String SQL_SELECT_ZaplacenoMinulyMesic = "SELECT \"ID_platba\", p.\"Cislo_faktury\", \"ID_typ_platby\", \"Castka\" " +
+            "FROM \"Platba\" p JOIN \"Faktura\" f ON f.Cislo_faktury=p.Cislo_faktury " +
             "WHERE DATEPART(m, Zaplaceno) = DATEPART(m, DATEADD(m, -1, getdate())) " +
             "AND DATEPART(yyyy, Zaplaceno) = DATEPART(yyyy, DATEADD(m, -1, getdate())) ORDER BY ID_typ_platby";
 
-        public static String SQL_INSERT = "INSERT INTO \"Platba\" VALUES (@id_platba, @faktura, @typ_platby, @castka)";
+        public static String SQL_INSERT = "INSERT INTO \"Platba\" VALUES ( @faktura, @typ_platby, @castka)";
         public static String SQL_DELETE_ID = "DELETE FROM \"Platba\" WHERE ID_platba=@id_platba";
         public static String SQL_UPDATE = "UPDATE \"Platba\" SET Cislo_faktury=@faktura, ID_typ_platby=@typ_platby, castka=@castka WHERE ID_platba=@id_platba";
 
@@ -84,15 +87,26 @@ namespace PujcovnaAutORM.ORM.mssql
         /// </summary>
         public Collection<Platba> select()
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
 
             SqlCommand command = db.CreateCommand(SQL_SELECT);
             SqlDataReader reader = db.Select(command);
 
             Collection<Platba> Platbas = Read(reader, true);
             reader.Close();
-            db.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
             return Platbas;
         }
         */
@@ -129,6 +143,62 @@ namespace PujcovnaAutORM.ORM.mssql
             }
             return platba;
         }
+
+        /// <summary>
+        /// Select records.
+        /// </summary>
+        public Collection<Platba> selectMinMes(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_ZaplacenoMinulyMesic);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Platba> platbas = Read(reader, true);
+            reader.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
+            return platbas;
+        }
+
+        public int selectMax(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_MAXCisloP);
+            SqlDataReader reader = db.Select(command);
+            reader.Read();
+            int maxVal = reader.GetInt32(0);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return maxVal;
+        }
+
         /// <summary>
         /// Delete the record.
         /// </summary>
