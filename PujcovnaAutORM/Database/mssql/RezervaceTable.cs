@@ -36,12 +36,12 @@ namespace PujcovnaAutORM.ORM.mssql
             "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" r JOIN \"Rezervovano\" re ON r.Cislo_Rezervace=re.Cislo_Rezervace" +
             " where re.SPZ=@spz";
 
-        public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES ( @zakaznik, @zamestnanec," +
+        public static String SQL_INSERT = "INSERT INTO \"Rezervace \" VALUES ( @cislo_RP, @idZamestnance," +
             "@vyzvednuti, @vraceni)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Rezervace\" WHERE Cislo_rezervace = @cislo_rezervace";
-        public static String SQL_UPDATE = "UPDATE \"Rezervace\" SET Cislo_rezervace=@cislo_rezervace, Zakaznik=@zakaznik, " +
-            "Zamestnanec=@zamestnanec, Vyzvednuti=@vyzvednuti, Vraceni=@vraceni";
+        public static String SQL_UPDATE = "UPDATE \"Rezervace\" SET Cislo_ridickeho_prukazu=@cislo_RP, " +
+            "ID_zamestnance=@idZamestnance, Vyzvednuti=@vyzvednuti, Vraceni=@vraceni WHERE Cislo_rezervace=@cislo_rezervace";
 
         #region Abstraktní metody
         /// <summary>
@@ -391,8 +391,8 @@ namespace PujcovnaAutORM.ORM.mssql
         private static void PrepareCommand(SqlCommand command, Rezervace rezervace)
         {
             command.Parameters.AddWithValue("@cislo_rezervace", rezervace.cislo_rezervace);
-            command.Parameters.AddWithValue("@zakaznik", rezervace.cislo_rp);
-            command.Parameters.AddWithValue("@zamestnanec", rezervace.id_zam);
+            command.Parameters.AddWithValue("@cislo_RP", rezervace.cislo_rp);
+            command.Parameters.AddWithValue("@idZamestnance", rezervace.id_zam);
             command.Parameters.AddWithValue("@vyzvednuti", rezervace.vyzvednuti);
             command.Parameters.AddWithValue("@vraceni", rezervace.vraceni);
         }

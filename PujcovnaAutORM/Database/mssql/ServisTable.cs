@@ -26,8 +26,8 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_INSERT = "INSERT INTO \"Servis \" VALUES (@spz, @od," +
             "@do_)";
         public static String SQL_DELETE_ID = "DELETE FROM \"Servis\" WHERE Poradi_s = @poradi_s";
-        public static String SQL_UPDATE = "UPDATE \"Servis\" SET Poradi_s=@poradi_s, SPZ=@spz, " +
-            "Od=@od, Do=@do_";
+        public static String SQL_UPDATE = "UPDATE \"Servis\" SET SPZ=@spz, " +
+            "Od=@od, Do=@do_ WHERE Poradi_s=@poradi_s";
 
         #region Abstraktní metody
 

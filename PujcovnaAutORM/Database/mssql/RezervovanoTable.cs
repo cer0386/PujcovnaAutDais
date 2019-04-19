@@ -26,8 +26,8 @@ namespace PujcovnaAutORM.ORM.mssql
         //smazání auta z rezervace
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezervace = @cislo_rezervace "+
             "SPZ=@spz";
-        public static String SQL_UPDATE = "UPDATE \"Rezervovano\" SET Cislo_rezervace=@cislo_rezervace, SPZ=@spz " +
-            "WHERE Cislo_rezervace=@Cislo_rezervace AND SPZ=@spz";
+        /*public static String SQL_UPDATE = "UPDATE \"Rezervovano\" SET Cislo_rezervace=@cislo_rezervace, SPZ=@spz " +
+            "WHERE Cislo_rezervace=@Cislo_rezervace AND SPZ=@spz";*/
 
         #region Abstraktní metody
         /// <summary>
@@ -57,7 +57,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return ret;
         }
-
+        /*
         /// <summary>
         /// Update the record.
         /// </summary>
@@ -85,7 +85,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
             return ret;
         }
-
+        */
         /*
         /// <summary>
         /// Select the records.

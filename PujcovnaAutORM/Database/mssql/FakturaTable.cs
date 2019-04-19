@@ -30,8 +30,8 @@ namespace PujcovnaAutORM.ORM.mssql
             "@potvrzeno, @zaplaceno)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Faktura\" WHERE Cislo_faktury = @cislo_faktury";
-        public static String SQL_UPDATE = "UPDATE \"Faktura\" SET Cislo_faktury=@cislo_faktury, Cislo_rezervace=@rezervace, " +
-            "Vytvoreno=@vytvoreno, Potvrzeno=@potvrzeno, Zaplaceno=@zaplaceno";
+        public static String SQL_UPDATE = "UPDATE \"Faktura\" SET Cislo_rezervace=@rezervace, " +
+            "Vytvoreno=@vytvoreno, Potvrzeno=@potvrzeno, Zaplaceno=@zaplaceno WHERE Cislo_faktury=@cislo_faktury";
 
         #region Abstraktní metody
         /// <summary>

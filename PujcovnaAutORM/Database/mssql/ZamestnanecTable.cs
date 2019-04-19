@@ -26,8 +26,8 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_INSERT = "INSERT INTO \"Zamestnanec \" VALUES (@id_zamestnance, @pozice, @jmeno, @prijmeni, @email)";
 
         public static String SQL_DELETE_ID = "DELETE FROM \"Zamestnanec\" WHERE ID_zamestnance = @id_zamestnance";
-        public static String SQL_UPDATE = "UPDATE \"Zamestnanec\" SET ID_zamestnance=@id_zamestnance, Jmeno=@jmeno, " +
-            "Prijmeni=@prijmeni, Email=@email";
+        public static String SQL_UPDATE = "UPDATE \"Zamestnanec\" SET Jmeno=@jmeno, " +
+            "Prijmeni=@prijmeni, Email=@email WHERE ID_zamestnance=@id_zamestnance";
 
         public static String SQL_GenID = "SELECT dbo.GeneraceIDZamestnance(@prijmeni)";
         public static String SQL_GenEmail = "SELECT dbo.GeneraceEmailu(@id)";

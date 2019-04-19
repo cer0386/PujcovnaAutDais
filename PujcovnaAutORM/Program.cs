@@ -61,6 +61,7 @@ namespace PujcovnaAutORM
 
             AutoTable.insert(a3, db);
             Console.WriteLine(new AutoTable().select(a3.spz, db).toString());
+            
 
             Auto a4 = new Auto();
             a4.spz = "D123456";
@@ -88,6 +89,11 @@ namespace PujcovnaAutORM
             AutoTable.insert(a5, db);
             Console.WriteLine(new AutoTable().select(a5.spz, db).toString());
 
+            //Update Auta
+            Console.WriteLine("Cena auta před: " + new AutoTable().select(a3.spz, db).cena_za_den);
+            a3.cena_za_den = 1500;
+            AutoTable.update(a3);
+            Console.WriteLine("Cena auta po: " + new AutoTable().select(a3.spz, db).cena_za_den);
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -97,9 +103,20 @@ namespace PujcovnaAutORM
             p2.id_pozice = 2;
             p2.nazev = "Manažer";
 
+            Pozice p3 = new Pozice();
+            p3.id_pozice = 3;
+            p3.nazev = "Test";
+
             Console.WriteLine("Test výpisu vložených pozic");
             PoziceTable.insert(p2, db);
             Console.WriteLine(new PoziceTable().select(p2.id_pozice, db).toString());
+            PoziceTable.insert(p3, db);
+            Console.WriteLine("Pozice před: "+ new PoziceTable().select(p3.id_pozice, db).toString());
+
+            //update pozice
+            p3.nazev = "dTest";
+            PoziceTable.update(p3);
+            Console.WriteLine("Pozice po: " + new PoziceTable().select(p3.id_pozice, db).toString());
 
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
@@ -120,7 +137,12 @@ namespace PujcovnaAutORM
             z2.id_Pozice = p2.id_pozice;
 
             ZamestnanecTable.insert(z2);
-            Console.WriteLine(new ZamestnanecTable().select("jon001", db).toString());
+            Console.WriteLine("Zaměstnanec před: " + new ZamestnanecTable().select("jon001", db).toString());
+
+            //Update zaměstnance
+            z2.jmeno = "Palawa";
+            ZamestnanecTable.update(z2);
+            Console.WriteLine("Zaměstnanec po: " + new ZamestnanecTable().select("jon001", db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -150,8 +172,16 @@ namespace PujcovnaAutORM
             zak2.email = "konvaP@gmail.com";
 
             ZakaznikTable.insert(zak2);
-            Console.WriteLine(new ZakaznikTable().select(zak2.cislo_RP, db).toString());
+            Console.WriteLine("Zákazník před: "+ new ZakaznikTable().select(zak2.cislo_RP, db).toString());
 
+            //update zákazníka
+            zak2.mesto = "Olomouc";
+            zak2.jmeno = "Magron";
+            zak2.ulice = "Jitrnicová";
+            zak2.cislo_popisne = 1;
+            zak.psc = 78945;
+            ZakaznikTable.update(zak2);
+            Console.WriteLine("Zákazník po: " + new ZakaznikTable().select(zak2.cislo_RP, db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -161,8 +191,11 @@ namespace PujcovnaAutORM
             tp3.zpusob_platby = "Převod";
 
             Typ_platbyTable.insert(tp3);
-            Console.WriteLine(new Typ_platbyTable().select(tp3.id_typ_platby, db).toString());
+            Console.WriteLine("Typ platby před: "+ new Typ_platbyTable().select(tp3.id_typ_platby, db).toString());
 
+            //Update typu platby
+            tp3.zpusob_platby = "Převodem";
+            Console.WriteLine("Typ platby po: " + new Typ_platbyTable().select(tp3.id_typ_platby, db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -178,8 +211,12 @@ namespace PujcovnaAutORM
 
             Console.WriteLine("Test výpisu vložených servisů");
             
-            Console.WriteLine(new ServisTable().select(s.poradi_s, db).toString());
+            Console.WriteLine("Servis před: "+ new ServisTable().select(s.poradi_s, db).toString());
 
+            //Update servisu datum Do
+            s.do_ = new DateTime(2019, 4, 20);
+            ServisTable.update(s);
+            Console.WriteLine("Servis po(posledni datum): " + new ServisTable().select(s.poradi_s, db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -205,7 +242,14 @@ namespace PujcovnaAutORM
             Console.WriteLine("Test výpisu vložených rezervací");
 
             Console.WriteLine(new RezervaceTable().select(r1.cislo_rezervace, db).toString());
-            Console.WriteLine(new RezervaceTable().select(r2.cislo_rezervace, db).toString());
+            Console.WriteLine("Rezervace před: "+ new RezervaceTable().select(r2.cislo_rezervace, db).toString());
+
+
+            //update konce rezervace
+
+            r2.vraceni = new DateTime(2019, 04, 22);
+            RezervaceTable.update(r2);
+            Console.WriteLine("Rezervace po(posledni datum): " + new RezervaceTable().select(r2.cislo_rezervace, db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -263,7 +307,13 @@ namespace PujcovnaAutORM
             
             Console.WriteLine(new FakturaTable().select(f1.cislo_faktury, db).toString());
             
-            Console.WriteLine(new FakturaTable().select(f2.cislo_faktury, db).toString());
+            Console.WriteLine("Faktura před: "+ new FakturaTable().select(f2.cislo_faktury, db).toString());
+
+            //Update faktury
+
+            f2.potvrzeno = new DateTime(2019, 4, 20);
+            FakturaTable.update(f2);
+            Console.WriteLine("Faktura po(potvrzeno, druhe datum): " + new FakturaTable().select(f2.cislo_faktury, db).toString());
 
             Console.WriteLine("\n---------------------------------------------------------------------------\n");
             
@@ -278,7 +328,13 @@ namespace PujcovnaAutORM
 
             Console.WriteLine("Test výpisu vložených plateb");
             
-            Console.WriteLine(new PlatbaTable().select(pl1.id_platba, db).toString());
+            Console.WriteLine("Platba před: "+ new PlatbaTable().select(pl1.id_platba, db).toString());
+
+            //update platby
+            pl1.castka = 7123;
+            PlatbaTable.update(pl1);
+            Console.WriteLine("Platba po: " + new PlatbaTable().select(pl1.id_platba, db).toString());
+
 
             Console.WriteLine("\n---------------------------------------------------------------------------");
             Console.WriteLine("---------------------------------------------------------------------------");
@@ -397,7 +453,7 @@ namespace PujcovnaAutORM
             Console.WriteLine("---------------------------------------------------------------------------");
             Console.WriteLine("---------------------------------------------------------------------------");
             Console.WriteLine("---------------------------------------------------------------------------\n");
-            Console.WriteLine("                        Výpis netriviálních funkcí                  \n");
+            Console.WriteLine("                 Výpis a provedení netriviálních funkcí                  \n");
 
 
             //Procedury a funkce

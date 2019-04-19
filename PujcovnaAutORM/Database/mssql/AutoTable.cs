@@ -54,9 +54,9 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_INSERT = "INSERT INTO \"Auto \" VALUES (@spz, @model, @znacka, @zakoupeno, " +
             "@stk, @pocet_nehod, @servis, @najeto, @cena_za_den)";
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Auto\" WHERE SPZ = @spz";
-        public static String SQL_UPDATE = "UPDATE \"Auto\" SET SPZ=@spz, Model=@model, " +
-            "Znacka=@znacka, Zakoupeno=@zakoupeno, STK=@stk, Pocet_nehod=@pocet_nehod, Servis=@servis,najeto=@najeto" +
-            "Cena_za_den=@cena_za_den";
+        public static String SQL_UPDATE = "UPDATE \"Auto\" SET Model=@model, " +
+            "Znacka=@znacka, Zakoupeno=@zakoupeno, STK=@stk, Pocet_nehod=@pocet_nehod, Servis=@servis,najeto=@najeto, " +
+            "Cena_za_den=@cena_za_den WHERE SPZ=@spz";
         public static String SQL_UPDATE_Servis = "UPDATE \"Auto\" SET Servis=@servis WHERE SPZ=@spz";
 
         public static String SQL_UPDATE_NahraditAuta = "UPDATE \"Rezervovano\" SET SPZ = @newSPZ where Cislo_rezervace = (SELECT DISTINCT(r.Cislo_Rezervace) FROM \"Rezervovano\" re " +
