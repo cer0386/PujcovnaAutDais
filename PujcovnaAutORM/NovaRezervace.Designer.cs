@@ -38,17 +38,14 @@
             this.odebratZakB = new System.Windows.Forms.Button();
             this.vytvoritRezB = new System.Windows.Forms.Button();
             this.dostupnaAuta = new System.Windows.Forms.DataGridView();
-            this.autaNaRez = new System.Windows.Forms.DataGridView();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.odebratAutoB = new System.Windows.Forms.Button();
             this.pridatAutoB = new System.Windows.Forms.Button();
             this.vlozitD = new System.Windows.Forms.Button();
-            this.rekapRez = new System.Windows.Forms.DataGridView();
+            this.rekapR = new System.Windows.Forms.ListBox();
+            this.novyZak = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dostupnaAuta)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autaNaRez)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rekapRez)).BeginInit();
             this.SuspendLayout();
             // 
             // DatOd
@@ -97,6 +94,7 @@
             // cisloRPText
             // 
             this.cisloRPText.Location = new System.Drawing.Point(12, 202);
+            this.cisloRPText.MaxLength = 8;
             this.cisloRPText.Name = "cisloRPText";
             this.cisloRPText.Size = new System.Drawing.Size(163, 20);
             this.cisloRPText.TabIndex = 5;
@@ -109,6 +107,7 @@
             this.pridatZakB.TabIndex = 6;
             this.pridatZakB.Text = "Přidat zákazníka";
             this.pridatZakB.UseVisualStyleBackColor = true;
+            this.pridatZakB.Click += new System.EventHandler(this.pridatZakB_Click);
             // 
             // odebratZakB
             // 
@@ -118,31 +117,26 @@
             this.odebratZakB.TabIndex = 7;
             this.odebratZakB.Text = "Odebrat zákazníka";
             this.odebratZakB.UseVisualStyleBackColor = true;
+            this.odebratZakB.Click += new System.EventHandler(this.odebratZakB_Click);
             // 
             // vytvoritRezB
             // 
             this.vytvoritRezB.Location = new System.Drawing.Point(181, 397);
             this.vytvoritRezB.Name = "vytvoritRezB";
-            this.vytvoritRezB.Size = new System.Drawing.Size(105, 41);
+            this.vytvoritRezB.Size = new System.Drawing.Size(80, 41);
             this.vytvoritRezB.TabIndex = 8;
             this.vytvoritRezB.Text = "Vytvořit rezervaci";
             this.vytvoritRezB.UseVisualStyleBackColor = true;
+            this.vytvoritRezB.Click += new System.EventHandler(this.vytvoritRezB_Click);
             // 
             // dostupnaAuta
             // 
             this.dostupnaAuta.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dostupnaAuta.Location = new System.Drawing.Point(491, 40);
+            this.dostupnaAuta.Location = new System.Drawing.Point(363, 40);
             this.dostupnaAuta.Name = "dostupnaAuta";
-            this.dostupnaAuta.Size = new System.Drawing.Size(326, 342);
+            this.dostupnaAuta.Size = new System.Drawing.Size(565, 342);
             this.dostupnaAuta.TabIndex = 9;
-            // 
-            // autaNaRez
-            // 
-            this.autaNaRez.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.autaNaRez.Location = new System.Drawing.Point(823, 40);
-            this.autaNaRez.Name = "autaNaRez";
-            this.autaNaRez.Size = new System.Drawing.Size(312, 342);
-            this.autaNaRez.TabIndex = 11;
+            this.dostupnaAuta.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dostupnaAuta_CellClick);
             // 
             // label4
             // 
@@ -156,38 +150,31 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(501, 24);
+            this.label5.Location = new System.Drawing.Point(363, 24);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 13);
             this.label5.TabIndex = 13;
             this.label5.Text = "Dostupná auta";
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(727, 24);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(90, 13);
-            this.label6.TabIndex = 14;
-            this.label6.Text = "Auta na rezervaci";
-            // 
             // odebratAutoB
             // 
-            this.odebratAutoB.Location = new System.Drawing.Point(823, 397);
+            this.odebratAutoB.Location = new System.Drawing.Point(267, 397);
             this.odebratAutoB.Name = "odebratAutoB";
-            this.odebratAutoB.Size = new System.Drawing.Size(105, 41);
+            this.odebratAutoB.Size = new System.Drawing.Size(90, 41);
             this.odebratAutoB.TabIndex = 15;
             this.odebratAutoB.Text = "Odebrat auto";
             this.odebratAutoB.UseVisualStyleBackColor = true;
+            this.odebratAutoB.Click += new System.EventHandler(this.odebratAutoB_Click);
             // 
             // pridatAutoB
             // 
-            this.pridatAutoB.Location = new System.Drawing.Point(491, 397);
+            this.pridatAutoB.Location = new System.Drawing.Point(363, 397);
             this.pridatAutoB.Name = "pridatAutoB";
             this.pridatAutoB.Size = new System.Drawing.Size(105, 41);
             this.pridatAutoB.TabIndex = 16;
             this.pridatAutoB.Text = "Přidat auto";
             this.pridatAutoB.UseVisualStyleBackColor = true;
+            this.pridatAutoB.Click += new System.EventHandler(this.pridatAutoB_Click);
             // 
             // vlozitD
             // 
@@ -199,27 +186,36 @@
             this.vlozitD.UseVisualStyleBackColor = true;
             this.vlozitD.Click += new System.EventHandler(this.vlozitD_Click);
             // 
-            // rekapRez
+            // rekapR
             // 
-            this.rekapRez.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.rekapRez.Location = new System.Drawing.Point(181, 40);
-            this.rekapRez.Name = "rekapRez";
-            this.rekapRez.Size = new System.Drawing.Size(304, 342);
-            this.rekapRez.TabIndex = 18;
+            this.rekapR.FormattingEnabled = true;
+            this.rekapR.Location = new System.Drawing.Point(178, 40);
+            this.rekapR.Name = "rekapR";
+            this.rekapR.Size = new System.Drawing.Size(179, 342);
+            this.rekapR.TabIndex = 19;
+            this.rekapR.SelectedIndexChanged += new System.EventHandler(this.rekapR_SelectedIndexChanged);
+            // 
+            // novyZak
+            // 
+            this.novyZak.Location = new System.Drawing.Point(12, 397);
+            this.novyZak.Name = "novyZak";
+            this.novyZak.Size = new System.Drawing.Size(105, 41);
+            this.novyZak.TabIndex = 20;
+            this.novyZak.Text = "Nový zákazník";
+            this.novyZak.UseVisualStyleBackColor = true;
             // 
             // NovaRezervace
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1137, 450);
-            this.Controls.Add(this.rekapRez);
+            this.ClientSize = new System.Drawing.Size(947, 450);
+            this.Controls.Add(this.novyZak);
+            this.Controls.Add(this.rekapR);
             this.Controls.Add(this.vlozitD);
             this.Controls.Add(this.pridatAutoB);
             this.Controls.Add(this.odebratAutoB);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.autaNaRez);
             this.Controls.Add(this.dostupnaAuta);
             this.Controls.Add(this.vytvoritRezB);
             this.Controls.Add(this.odebratZakB);
@@ -234,8 +230,6 @@
             this.Text = "NovaRezervace";
             this.Load += new System.EventHandler(this.NovaRezervace_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dostupnaAuta)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.autaNaRez)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rekapRez)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -253,13 +247,12 @@
         private System.Windows.Forms.Button odebratZakB;
         private System.Windows.Forms.Button vytvoritRezB;
         private System.Windows.Forms.DataGridView dostupnaAuta;
-        private System.Windows.Forms.DataGridView autaNaRez;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button odebratAutoB;
         private System.Windows.Forms.Button pridatAutoB;
         private System.Windows.Forms.Button vlozitD;
-        private System.Windows.Forms.DataGridView rekapRez;
+        private System.Windows.Forms.ListBox rekapR;
+        private System.Windows.Forms.Button novyZak;
     }
 }

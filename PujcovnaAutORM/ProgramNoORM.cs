@@ -23,7 +23,7 @@ namespace PujcovnaAutORM
 
 
             Application.Run(new Login());
-            Application.Run(new Menu());
+            Application.Run(new MenuF());
             
 
         }

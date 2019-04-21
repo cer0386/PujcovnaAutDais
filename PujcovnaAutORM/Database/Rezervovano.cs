@@ -8,6 +8,9 @@ namespace PujcovnaAutORM.ORM
 {
     public class Rezervovano
     {
+        //dodáno kvůli updatu ve vazební tabulce
+        public int id_rezervace { get; set; }
+
         public Rezervace rezervace { get; set; }
         public Auto auto { get; set; }
 

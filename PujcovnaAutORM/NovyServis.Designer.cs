@@ -41,6 +41,7 @@
             // spzText
             // 
             this.spzText.Location = new System.Drawing.Point(12, 25);
+            this.spzText.MaxLength = 7;
             this.spzText.Name = "spzText";
             this.spzText.Size = new System.Drawing.Size(131, 20);
             this.spzText.TabIndex = 0;
@@ -67,6 +68,7 @@
             this.servisB.TabIndex = 3;
             this.servisB.Text = "Dát do servisu";
             this.servisB.UseVisualStyleBackColor = true;
+            this.servisB.Click += new System.EventHandler(this.servisB_Click);
             // 
             // vyraditB
             // 
@@ -76,6 +78,7 @@
             this.vyraditB.TabIndex = 4;
             this.vyraditB.Text = "Vyřadit auto";
             this.vyraditB.UseVisualStyleBackColor = true;
+            this.vyraditB.Click += new System.EventHandler(this.vyraditB_Click);
             // 
             // label1
             // 

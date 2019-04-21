@@ -70,6 +70,7 @@
             // spzText
             // 
             this.spzText.Location = new System.Drawing.Point(12, 35);
+            this.spzText.MaxLength = 7;
             this.spzText.Name = "spzText";
             this.spzText.Size = new System.Drawing.Size(163, 20);
             this.spzText.TabIndex = 9;
@@ -93,6 +94,7 @@
             this.hledatB.TabIndex = 12;
             this.hledatB.Text = "Vyhledat";
             this.hledatB.UseVisualStyleBackColor = true;
+            this.hledatB.Click += new System.EventHandler(this.hledatB_Click);
             // 
             // zaraditB
             // 
@@ -102,6 +104,7 @@
             this.zaraditB.TabIndex = 13;
             this.zaraditB.Text = "Zařadit do provozu";
             this.zaraditB.UseVisualStyleBackColor = true;
+            this.zaraditB.Click += new System.EventHandler(this.zaraditB_Click);
             // 
             // hledaneAuto
             // 
@@ -118,6 +121,8 @@
             this.vyrazenaA.Name = "vyrazenaA";
             this.vyrazenaA.Size = new System.Drawing.Size(263, 356);
             this.vyrazenaA.TabIndex = 15;
+            this.vyrazenaA.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.vyrazenaA_CellContentClick);
+            this.vyrazenaA.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.vyrazenaA_CellClick);
             // 
             // autaKVyr
             // 
@@ -134,6 +139,7 @@
             this.nahradniA.Name = "nahradniA";
             this.nahradniA.Size = new System.Drawing.Size(263, 403);
             this.nahradniA.TabIndex = 17;
+            this.nahradniA.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.nahradniA_CellClick);
             // 
             // label1
             // 
@@ -182,6 +188,7 @@
             this.Controls.Add(this.label3);
             this.Name = "VyraditAuto";
             this.Text = "VyraditAuto";
+            this.Load += new System.EventHandler(this.VyraditAuto_Load);
             ((System.ComponentModel.ISupportInitialize)(this.hledaneAuto)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vyrazenaA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.autaKVyr)).EndInit();

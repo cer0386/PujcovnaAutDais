@@ -67,11 +67,17 @@
     <Compile Include="Database\Typ_platby.cs" />
     <Compile Include="Database\Zakaznik.cs" />
     <Compile Include="Database\Zamestnanec.cs" />
-    <Compile Include="Menu.cs">
+    <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Menu.Designer.cs">
-      <DependentUpon>Menu.cs</DependentUpon>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuF.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuF.Designer.cs">
+      <DependentUpon>MenuF.cs</DependentUpon>
     </Compile>
     <Compile Include="NovaRezervace.cs">
       <SubType>Form</SubType>
@@ -85,8 +91,14 @@
     <Compile Include="NovyServis.Designer.cs">
       <DependentUpon>NovyServis.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="ProgramNoORM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpravitRezervaci.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpravitRezervaci.Designer.cs">
+      <DependentUpon>UpravitRezervaci.cs</DependentUpon>
+    </Compile>
     <Compile Include="VyraditAuto.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -100,14 +112,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Menu.resx">
-      <DependentUpon>Menu.cs</DependentUpon>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuF.resx">
+      <DependentUpon>MenuF.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NovaRezervace.resx">
       <DependentUpon>NovaRezervace.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NovyServis.resx">
       <DependentUpon>NovyServis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpravitRezervaci.resx">
+      <DependentUpon>UpravitRezervaci.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VyraditAuto.resx">
       <DependentUpon>VyraditAuto.cs</DependentUpon>

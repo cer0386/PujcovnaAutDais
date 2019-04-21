@@ -15,6 +15,10 @@ namespace PujcovnaAutORM.ORM.mssql
             "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" "
             +"WHERE Cislo_rezervace = @cislo_rezervace";
 
+        //posledních 10 sjednaných rezervací - nové
+        public static String SQL_SELECT_Top10 = "SELECT TOP 10 \"Cislo_Rezervace\", \"Cislo_ridickeho_prukazu\", \"ID_zamestnance\", " +
+            "\"Vyzvednuti\", \"Vraceni\" FROM \"Rezervace\" ORDER BY Cislo_rezervace";
+
         //Zjištění nejnovějšího čísla rezervace
         public static String SQL_SELECT_MAXCisloR = "SELECT MAX(Cislo_rezervace) FROM \"Rezervace\""; 
 
@@ -131,6 +135,36 @@ namespace PujcovnaAutORM.ORM.mssql
             return rezervaces;
         }
         */
+        /// <summary>
+        /// Select the records.
+        /// </summary>
+        public Collection<Rezervace> selectTop10(Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_Top10);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Rezervace> rezervaces = Read(reader);
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return rezervaces;
+        }
+
         /// <summary>
         /// Select the records.
         /// </summary>

@@ -13,7 +13,7 @@ namespace PujcovnaAutORM.ORM.mssql
         //public static String SQL_SELECT = "SELECT * FROM \"Rezervovano\"";
 
         //vypis tabulky rezervovano podle id rezervace
-        public static String SQL_SELECT_ID_REZ = "SELECT \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" "+
+        public static String SQL_SELECT_ID_REZ = "SELECT \"ID_rezervace\", \"Cislo_rezervace\", \"SPZ\" FROM \"Rezervovano\" "+
             "WHERE Cislo_rezervace = @cislo_rezervace";
 
         
@@ -25,7 +25,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
         //smazání auta z rezervace
         public static String SQL_DELETE_SPZ = "DELETE FROM \"Rezervovano\" WHERE Cislo_rezervace = @cislo_rezervace "+
-            "SPZ=@spz";
+            "AND SPZ=@spz";
         /*public static String SQL_UPDATE = "UPDATE \"Rezervovano\" SET Cislo_rezervace=@cislo_rezervace, SPZ=@spz " +
             "WHERE Cislo_rezervace=@Cislo_rezervace AND SPZ=@spz";*/
 
@@ -238,6 +238,7 @@ namespace PujcovnaAutORM.ORM.mssql
 
         private static void PrepareCommand(SqlCommand command, Rezervovano rezervovano)
         {
+            command.Parameters.AddWithValue("@id_rezervace", rezervovano.id_rezervace);
             command.Parameters.AddWithValue("@cislo_rezervace", rezervovano.ciclo_r);
             command.Parameters.AddWithValue("@spz", rezervovano.auto_spz);
         }
@@ -250,6 +251,7 @@ namespace PujcovnaAutORM.ORM.mssql
             {
                 int i = -1;
                 Rezervovano rezervovano = new Rezervovano();
+                rezervovano.id_rezervace = reader.GetInt32(++i);
                 rezervovano.ciclo_r = reader.GetInt32(++i);
                 rezervovano.rezervace = new Rezervace();
                 rezervovano.rezervace.cislo_rezervace = rezervovano.ciclo_r;

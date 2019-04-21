@@ -14,6 +14,10 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT_ID = "SELECT \"Cislo_faktury\", \"Cislo_rezervace\", \"Vytvoreno\", \"Potvrzeno\", \"Zaplaceno\" "+
             "FROM \"Faktura\" WHERE Cislo_faktury = @cislo_faktury";
 
+        //Faktura podle čísla rezervace - nové
+        public static String SQL_SELECT_REZ = "SELECT \"Cislo_faktury\", \"Cislo_rezervace\", \"Vytvoreno\", \"Potvrzeno\", \"Zaplaceno\" " +
+            "FROM \"Faktura\" WHERE Cislo_rezervace = @rezervace";
+
         //Zjištění nejnovějšího čísla faktury
         public static String SQL_SELECT_MAXCisloF = "SELECT MAX(Cislo_faktury) FROM \"Faktura\"";
 
@@ -121,6 +125,44 @@ namespace PujcovnaAutORM.ORM.mssql
             return fakturas;
         }
         */
+        /// <summary>
+        /// Select the record.
+        /// </summary>
+        /// <param name="id">faktura id</param>
+        public Faktura selectCRez(int cislo_rezervace, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+
+            SqlCommand command = db.CreateCommand(SQL_SELECT_REZ);
+
+            command.Parameters.AddWithValue("@rezervace", cislo_rezervace);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Faktura> fakturas = Read(reader);
+            Faktura faktura = null;
+            if (fakturas.Count == 1)
+            {
+                faktura = fakturas[0];
+            }
+            reader.Close();
+
+            if (pDb == null)
+            {
+                db.Close();
+            }
+
+            return faktura;
+        }
+
         /// <summary>
         /// Select the record.
         /// </summary>
