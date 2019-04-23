@@ -1,7 +1,6 @@
 ﻿using PujcovnaAutORM.ORM;
 using PujcovnaAutORM.ORM.mssql;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -19,6 +18,7 @@ namespace PujcovnaAutORM
         Collection<Rezervace> rezervaceNWeek = new Collection<Rezervace>();
         Collection<Rezervace> rezervace10 = new Collection<Rezervace>();
         Collection<Servis> servisy = new Collection<Servis>();
+        public Collection<Zamestnanec> zamestPRez = new Collection<Zamestnanec>();
         public static Rezervace rezervace { get; set; }
         Faktura faktura = new Faktura();
         int rezervaceUpravit;
@@ -79,9 +79,15 @@ namespace PujcovnaAutORM
             detailAuta.Columns[7].Name = "Najeto";
             detailAuta.Columns[8].Name = "Cena/den";
 
+            pocetRezZam.ColumnCount = 4;
+            pocetRezZam.Columns[0].Name = "ID";
+            pocetRezZam.Columns[1].Name = "Jméno";
+            pocetRezZam.Columns[2].Name = "Příjmení";
+            pocetRezZam.Columns[3].Name = "Počet rezervací";
+
             rezervaceNWeek = new RezervaceTable().selectNextWeek();
             rezervace10 = new RezervaceTable().selectTop10();
-            
+            zamestPRez = new ZamestnanecTable().select();
 
             foreach (Rezervace r in rezervaceNWeek)
             {
@@ -90,6 +96,10 @@ namespace PujcovnaAutORM
             foreach (Rezervace r in rezervace10)
             {
                 rez10.Rows.Add(r.cislo_rezervace, r.zakaznik.cislo_RP, r.zamestnanec.id_zamestnance, r.vyzvednuti, r.vraceni);
+            }
+            foreach (Zamestnanec z in zamestPRez)
+            {
+                pocetRezZam.Rows.Add(z.id_zamestnance, z.jmeno, z.prijmeni, z.pocetRezervaci);
             }
 
         }
@@ -240,6 +250,22 @@ namespace PujcovnaAutORM
             else
                 MessageBox.Show("Auto neexistuje");
 
+        }
+
+        private void novyZamB_Click(object sender, EventArgs e)
+        {
+            NovyZam nz = new NovyZam();
+            nz.Show();
+        }
+
+        private void aktualizovatVPR_Click(object sender, EventArgs e)
+        {
+            zamestPRez = new ZamestnanecTable().select();
+            pocetRezZam.Rows.Clear();
+            foreach (Zamestnanec z in zamestPRez)
+            {
+                pocetRezZam.Rows.Add(z.id_zamestnance, z.jmeno, z.prijmeni, z.pocetRezervaci);
+            }
         }
     }
 }

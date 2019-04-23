@@ -91,7 +91,13 @@
     <Compile Include="NovyServis.Designer.cs">
       <DependentUpon>NovyServis.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProgramNoORM.cs" />
+    <Compile Include="NovyZam.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NovyZam.Designer.cs">
+      <DependentUpon>NovyZam.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgramFORM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UpravitRezervaci.cs">
       <SubType>Form</SubType>
@@ -123,6 +129,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="NovyServis.resx">
       <DependentUpon>NovyServis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NovyZam.resx">
+      <DependentUpon>NovyZam.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpravitRezervaci.resx">
       <DependentUpon>UpravitRezervaci.cs</DependentUpon>

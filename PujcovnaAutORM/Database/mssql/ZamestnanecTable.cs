@@ -18,7 +18,7 @@ namespace PujcovnaAutORM.ORM.mssql
         public static String SQL_SELECT_SeznamZamPocetRez =
             "SELECT z.\"ID_zamestnance\", z.\"ID_pozice\", z.\"Jmeno\", z.\"Prijmeni\", z.\"Email\", COUNT(r.Cislo_Rezervace) AS Pocet_Rezervaci " +
             "FROM \"Zamestnanec\" z " +
-            "JOIN \"Rezervace\" r ON r.ID_zamestnance=z.ID_zamestnance " +
+            "LEFT OUTER JOIN \"Rezervace\" r ON r.ID_zamestnance=z.ID_zamestnance " +
             "JOIN \"Pozice\" p ON p.ID_pozice=z.ID_pozice " +
             "WHERE Nazev = \'Zaměstnanec\' " +
             "GROUP BY z.\"ID_zamestnance\", z.\"ID_pozice\", z.\"Jmeno\", z.\"Prijmeni\", z.\"Email\"";
@@ -167,6 +167,9 @@ namespace PujcovnaAutORM.ORM.mssql
             return zamestnanec;
         }
 
+        /// <summary>
+        /// Zamestnanci s poctem rezervaci
+        /// </summary>
         public Collection<Zamestnanec> select(Database pDb = null)
         {
             Database db;
@@ -183,7 +186,7 @@ namespace PujcovnaAutORM.ORM.mssql
             SqlCommand command = db.CreateCommand(SQL_SELECT_SeznamZamPocetRez);
             SqlDataReader reader = db.Select(command);
 
-            Collection<Zamestnanec> zamestnanecs = Read(reader);
+            Collection<Zamestnanec> zamestnanecs = Read(reader, true);
             reader.Close();
 
             if (pDb == null)

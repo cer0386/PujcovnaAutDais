@@ -10,8 +10,12 @@ namespace PujcovnaAutORM.ORM.mssql
 {
     public class PoziceTable
     {
-        //public static String SQL_SELECT = "SELECT * FROM Pozice";
+        public static String SQL_SELECT = "SELECT * FROM Pozice";
         public static String SQL_SELECT_ID = "SELECT \"ID_pozice\", \"Nazev\" FROM Pozice WHERE ID_pozice=@id_pozice";
+
+        //select podle názvu pozice - nové
+        public static String SQL_SELECT_Nazev = "SELECT \"ID_pozice\", \"Nazev\" FROM Pozice WHERE Nazev=@nazev";
+
         public static String SQL_INSERT = "INSERT INTO Pozice VALUES (@id_pozice, @nazev)";
         public static String SQL_DELETE_ID = "DELETE FROM Pozice WHERE ID_pozice=@id_pozice";
         public static String SQL_UPDATE = "UPDATE Pozice SET Nazev=@nazev WHERE id_pozice=@id_pozice";
@@ -69,14 +73,22 @@ namespace PujcovnaAutORM.ORM.mssql
             return ret;
         }
 
-        /*
+        
         /// <summary>
         /// Select records.
         /// </summary>
-        public Collection<Pozice> select()
+        public Collection<Pozice> select(Database pDb = null)
         {
-            Database db = new Database();
-            db.Connect();
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
 
             SqlCommand command = db.CreateCommand(SQL_SELECT);
             SqlDataReader reader = db.Select(command);
@@ -84,9 +96,12 @@ namespace PujcovnaAutORM.ORM.mssql
             Collection<Pozice> Pozices = Read(reader, true);
             reader.Close();
             if (pDb == null)
+            {
+                db.Close();
+            }
             return Pozices;
         }
-        */
+        
         /// <summary>
         /// Select records for pozice.
         /// </summary>
@@ -120,6 +135,38 @@ namespace PujcovnaAutORM.ORM.mssql
             }
             return pozice;
         }
+
+        public Pozice select(string nazev, Database pDb = null)
+        {
+            Database db;
+            if (pDb == null)
+            {
+                db = new Database();
+                db.Connect();
+            }
+            else
+            {
+                db = (Database)pDb;
+            }
+            SqlCommand command = db.CreateCommand(SQL_SELECT_Nazev);
+
+            command.Parameters.AddWithValue("@nazev", nazev);
+            SqlDataReader reader = db.Select(command);
+
+            Collection<Pozice> pozices = Read(reader);
+            Pozice pozice = null;
+            if (pozices.Count == 1)
+            {
+                pozice = pozices[0];
+            }
+            reader.Close();
+            if (pDb == null)
+            {
+                db.Close();
+            }
+            return pozice;
+        }
+
         /// <summary>
         /// Delete the record.
         /// </summary>
